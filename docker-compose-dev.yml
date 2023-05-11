@@ -1,0 +1,141 @@
+version: "3.7"
+services:
+  nginx:
+    image: data-copilot-nginx
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+      - adminer
+
+    environment:
+      ENVIRONMENT: DEVELOPMENT
+
+  database:
+    image: postgres:latest
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_DB: ${POSTGRES_DB}
+    volumes:
+      - type: volume
+        source: db-storage
+        target: /var/lib/postgresql/data
+    command: postgres -c listen_addresses=0.0.0.0
+
+  install-frontend-dependencies:
+    image: data-copilot-frontend-dev
+    volumes:
+      - ./frontend:/app
+    command: npm install
+
+  frontend:
+    image: data-copilot-frontend-dev
+    ports:
+      - "8080:80"
+    volumes:
+      - ./frontend:/app
+    command: npm run dev -- --port 80 --host
+    depends_on:
+      - install-frontend-dependencies
+
+  backend:
+    &backend
+    image: data-copilot-backend
+    ports:
+      - "8000:80"
+    environment:
+      AZURE_STORAGE_ACCOUNT_KEY: ${AZURE_STORAGE_ACCOUNT_KEY}
+      AZURE_STORAGE_ACCOUNT_NAME: ${AZURE_STORAGE_ACCOUNT_NAME}
+      BACKEND_HOST: ${BACKEND_HOST}
+      CONTAINER_NAME: ${CONTAINER_NAME}
+      JWT_SECRET_KEY: ${JWT_SECRET_KEY}
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_HOST: ${POSTGRES_HOST}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_PORT: ${POSTGRES_PORT}
+      POSTGRES_USER: ${POSTGRES_USER}
+      REDIS_URL: ${REDIS_URL}
+      OPENAI_API_KEY: ${OPENAI_API_KEY}
+      STORAGE_BACKEND: ${STORAGE_BACKEND}
+      ENVIRONMENT: DEVELOPMENT
+      COMPUTE_BACKEND: ${COMPUTE_BACKEND}
+
+    depends_on:
+      - database
+    volumes:
+      - ./backend:/home/fastapi_user/app/backend
+      - ./shared-fs:/home/fastapi_user/app/shared-fs
+    command: uvicorn backend.main:app --host 0.0.0.0 --port 80 --reload --log-level debug
+
+  adminer:
+    image: adminer
+    ports:
+      - "8010:8080"
+    depends_on:
+      - database
+
+  reset-db:
+    <<: *backend
+    command: python backend/setup/setup.py
+    ports:
+      - "8001:80"
+    profiles:
+      - reset_db
+
+  redis-queue:
+    image: redis:alpine
+    container_name: redis-queue
+    restart: always
+    ports:
+      - 6379:6379
+    command: redis-server --appendonly yes
+
+  rq-dashboard:
+    image: eoranged/rq-dashboard
+    container_name: rq-dashboard
+    restart: always
+    ports:
+      - 9181:9181
+    environment:
+      RQ_DASHBOARD_REDIS_URL: ${REDIS_URL}
+
+  celery-worker:
+    &worker
+    image: data-copilot-celery-worker
+    environment:
+      - REDIS_URL=${REDIS_URL}
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_HOST=${POSTGRES_HOST}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_PORT=${POSTGRES_PORT}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - TOKENIZERS_PARALLELISM=false
+      - ENVIRONMENT=DEVELOPMENT
+      - COMPUTE_BACKEND=${COMPUTE_BACKEND}
+
+    volumes:
+      - ./celery_app:/home/celery_user/app/celery_app
+      - ./shared-fs:/home/celery_user/app/shared-fs
+    command: watchmedo auto-restart -d ./celery_app/ -p "*.py;*.cfg" --recursive -- celery -A celery_app.worker.execution_app worker --loglevel=info --concurrency=1
+
+  flower:
+    image: data-copilot-celery-flower
+    environment:
+      - BROKER_URL=${REDIS_URL}
+
+    ports:
+      - 5555:5555
+    healthcheck:
+      test: [ "CMD", "curl", "--fail", "http://localhost:5555/" ]
+      interval: 10s
+      timeout: 10s
+      retries: 5
+    restart: always
+    command: celery flower
+
+volumes:
+  db-storage:

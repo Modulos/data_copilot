@@ -1,0 +1,3 @@
+celery>=5.2.7
+flower>=1.2.0
+redis>=4.4.2

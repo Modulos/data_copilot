@@ -1,0 +1,13 @@
+celery>=5.2.7
+numpy
+openai>=0.27
+openpyxl>=3.1.1
+pandas
+pandasai
+psycopg2-binary>=2.9.5
+pydantic>=1.10.4
+redis>=4.4.2
+simplejson>=3.18.3
+sqlalchemy>=2.0.4
+watchdog>=2.2.1
+xlrd>=2.0.1

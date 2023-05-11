@@ -1,0 +1,7 @@
+@mixin Inter($font-size, $line-height) {
+    font-family: "Inter";
+    font-weight: 500;
+    font-size: $font-size;
+    line-height: $line-height;
+    color: $white;
+}
