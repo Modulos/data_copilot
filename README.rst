@@ -48,9 +48,6 @@ Furthermore, you need to have an openai API key. You can get one by signing up f
 Cloning and Setting Up
 ----------------------
 
-.. image:: assets/login_page.png
-   :align: center
-   :width: 100%
 
 Once you have Docker, Docker Compose, and Python3 installed, you can download and set up DataCopilot. Run the following commands in your terminal:
 
@@ -63,6 +60,13 @@ Once you have Docker, Docker Compose, and Python3 installed, you can download an
 These commands will clone the DataCopilot repository and run the setup process.
 
 During the setup process, you will be prompted to enter your openai API key. You can also enter it manually by editing the ``.dev.env`` file in the root directory of the repository after the installation.
+
+Open DataCopilot in your browser: http://localhost
+
+
+.. image:: assets/login_page.png
+   :align: center
+   :width: 100%
 
 
 Maintaining and Updating
@@ -169,5 +173,30 @@ Data Copilot is a trademark of Modulos AG.
 
 
 
-Main Contributors
-=================
+Contributors
+============
+
+Project Leads
+-------------
+- `Dennis Turp <https://github.com/mdturp>`_
+- `Tim Rohner <https://github.com/leokster>`_
+
+Backend
+-------
+- `Tim Rohner <https://github.com/leokster>`_
+- `Michael Röthlisberger <https://github/roethlisbergermichael>`_
+- `Dominic Stark <https://github.com/dominicstark>`_
+- `Tomkuch <https://github.com/tomkuch>`_
+- `Andrei Vaduva <https://github.com/andreiv-dev>`_
+
+DevOps
+------
+- `Jiri Kralik <https://github.com/jirikralik>`_
+- `Serhii  Kyslyi <https://github.com/serhiikyslyi>`_
+- `Keven Le Moing <https://github.com/KevenLeMoing>`_
+
+
+Frontend
+--------
+- `Dennis Turp <https://github.com/mdturp>`_
+- `Oleh Lukashchuk <https://github.com/Olehlukashchuk96>`_
