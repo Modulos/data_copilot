@@ -18,7 +18,7 @@ function transformData(inputData: any) {
   const transformedData = { values: {} };
 
   const { columns, rows, values } = inputData.data;
-  console.log(columns, rows, values);
+
   for (let i = 0; i < columns.length; i += 1) {
     // @ts-ignore
     transformedData.values[columns[i]] = {};
@@ -27,7 +27,6 @@ function transformData(inputData: any) {
       transformedData.values[columns[i]][rows[j]] = values[i][j];
     }
   }
-  console.log(transformedData);
   return transformedData;
 }
 
@@ -188,8 +187,7 @@ function drawCorrelationMatrix(
         .attr('dominant-baseline', 'middle')
         .attr('opacity', 0)
         .attr('fill', 'black')
-        // Rembmer to fix this issue , TypeError on specific dataset.
-        .text(value.toFixed(2))
+        .text(value)
         .clone(true)
         .lower()
         .attr('class', 'value backdrop')

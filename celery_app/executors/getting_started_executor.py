@@ -4,6 +4,7 @@ from typing import Any, Dict, List, Optional
 import pandas as pd
 from pandas import read_excel
 from sqlalchemy import create_engine, text
+import numpy as np
 
 from celery_app.executors import helpers
 
@@ -93,7 +94,7 @@ def run(
         top_5_values = {str(k): v for k, v in top_5.items()}
 
         histogram_component = helpers.Component(
-            f"Histogram for {column}", helpers.ComponentTypes.PLOT_HIST
+            f"Histogram for {column}", helpers.ComponentTypes.PLOT_BAR
         )
         histogram_component.description = f"The top 5 values for {column}."
         histogram_component.config = {
@@ -106,5 +107,26 @@ def run(
             "values": list(top_5_values.values()),
         }
         message.add_component(histogram_component)
+
+    for column in dataset.columns:
+        # Check if the column is numeric
+        if dataset[column].dtype in ["int64", "float64"]:
+            histogram_component = helpers.Component(
+            f"Histogram for {column}", helpers.ComponentTypes.PLOT_HIST
+            )
+            histogram_component.description = f"The Histogram of {column}."
+            histogram_component.config = {
+                "show_title": True,
+                "show_description": True,
+                "highlight_columns": [],
+            }
+            values, bins = np.histogram(
+                dataset[column].values, bins=10, density=True)
+
+            histogram_component.data = {
+                "values": values.tolist(),
+                "bins": bins.tolist()[:-1],
+            }
+            message.add_component(histogram_component)
 
     return message.to_dict()

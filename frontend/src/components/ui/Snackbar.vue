@@ -34,10 +34,8 @@ watch(
   () => artifactStore.showSnackbar,
   (newValue) => {
     if (newValue) {
-      console.log(newValue);
       hide.value = false;
       setTimeout(() => {
-        console.log('timeout');
         hide.value = true;
       }, 3500);
     }

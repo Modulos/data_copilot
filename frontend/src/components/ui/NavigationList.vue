@@ -28,7 +28,6 @@ const modalStore = useModalStore();
 
 const clearChat = () => {
   // Clear all chat and messages from the store
-  console.log('Clearing chat');
   messages.clearMessages();
   chats.clearChats();
   router.push('/');
@@ -39,7 +38,6 @@ function routeToPage(url: string) {
 }
 
 const logout = () => {
-  console.log('Logging out');
   auth.logout();
 };
 

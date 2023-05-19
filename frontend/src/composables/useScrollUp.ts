@@ -9,7 +9,6 @@ export default function useScrollUp(callback?: Function, ...args: any[]) {
   }
   onMounted(() => {
     window.addEventListener('scroll', onscroll);
-    console.log(window);
   });
 
   onUnmounted(() => {

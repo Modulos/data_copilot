@@ -188,7 +188,6 @@ const useMessagesStore = defineStore({
       this.inputDisabled = true;
       this.activeTimoutId = setTimeout(() => {
         this.inputDisabled = false;
-        console.log('timeout');
       }, 60000);
       const chatApi = initApi(ChatApi);
       const m = await chatApi.postChatsChatidMessagesApiChatsChatIdMessagesPost(
