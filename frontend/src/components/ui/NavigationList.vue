@@ -12,6 +12,7 @@ import { useAuthStore } from '@/stores/auth';
 import IconYoutube from '../icons/IconYoutube.vue';
 import IconLinkedin from '../icons/IconLinkedin.vue';
 import IconTwitter from '../icons/IconTwitter.vue';
+import useModalStore from '@/stores/modal';
 
 defineProps({
   onlySocial: {
@@ -23,6 +24,7 @@ const messages = useMessagesStore();
 const chats = useChatsStore();
 const auth = useAuthStore();
 const router = useRouter();
+const modalStore = useModalStore();
 
 const clearChat = () => {
   // Clear all chat and messages from the store
@@ -40,12 +42,19 @@ const logout = () => {
   console.log('Logging out');
   auth.logout();
 };
+
+
+async function deleteAllChat() {
+  modalStore.fillModal('Delete chat', 'Would you like to permanently delete all chats?');
+  modalStore.openModal(clearChat);
+}
+
 </script>
 
 <template>
   <div class="flex-col">
     <div v-if="!onlySocial">
-      <SideBarButton description="Clear Conversations" @clicked="clearChat">
+      <SideBarButton description="Clear Conversations" @clicked="deleteAllChat">
         <template #icon>
           <IconDelete class="w-5 h-5 fill-gray-200" />
         </template>
