@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { defineExpose, ref } from 'vue';
+import { ref } from 'vue';
 import { useAuthStore } from '@/stores/auth';
 import type { Message } from '@/client/api';
 import useBreakpoints from '@/hooks/useBreakpoints';
@@ -76,7 +76,7 @@ function getText(componentData: any) {
 
 }
 .response__content {
-  ::v-deep svg {
+  :deep(svg) {
     max-width: 100%;
   }
 }

@@ -66,11 +66,11 @@ onMounted(() => {
         <span v-if="route.name !== 'home'">New chat</span>
         <IconAdd v-if="route.name !== 'home'" class="w-5 h-5 fill-gray-200" @click="newChat" />
       </div>
-      <div v-if="isMobile" class="sidebar__content" :class="[isMobile && isOpen ? 'h-screen' : 'h-0']">
+      <div v-if="isMobile" class="sidebar__content grow flex flex-col justify-between" :class="[isMobile && isOpen ? 'h-screen' : 'h-0']">
         <ChatList class="grow" />
         <NavigationList class="flex-none" />
       </div>
-      <div v-if="!isMobile">
+      <div v-if="!isMobile" class="grow flex flex-col justify-between">
         <ChatList class="grow" />
         <NavigationList class="flex-none" />
       </div>

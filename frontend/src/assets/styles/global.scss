@@ -1,7 +1,7 @@
 input:-webkit-autofill,
-::v-deep input:-webkit-autofill:focus {
+:deep(input:-webkit-autofill:focus) {
   transition: background-color 600000s 0s, color 600000s 0s;
 }
-::v-deep input[data-autocompleted] {
+:deep(input[data-autocompleted]) {
   background-color: transparent !important;
 }

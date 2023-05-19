@@ -33,12 +33,10 @@ onMounted(() => {
         © 2023 Modulos AG. All Rights Reserved
       </p>
       <p v-if="!isError" class="px-6 text-center opacity-50 hidden md:block">
-        Modulos Data Copilot beta version XYZ. Our goal is to make
-        conversational AI useful and safe for use in data and AI projects. Your
-        feedback will help us improve. Modulos is not responsible for output.
+        Modulos Data Copilot beta.
       </p>
       <p v-if="!isError" class="text-center opacity-50 block md:hidden" :class="isMobile ? 'px-0' : 'px-6'">
-        Modulos Data Copilot beta version XYZ.
+        Modulos Data Copilot beta.
         <span class="underline">Read more</span>
       </p>
     </div>
