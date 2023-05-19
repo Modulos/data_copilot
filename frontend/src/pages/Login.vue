@@ -4,10 +4,13 @@ import { ref, watch } from 'vue';
 // eslint-disable-next-line import/no-cycle
 import { useAuthStore } from '@/stores/auth';
 import useBreakpoints from '@/hooks/useBreakpoints';
+import { useRouter } from 'vue-router';
 
 import Logo from '@/assets/icons/svg/logo-landing.svg?component';
 import IconGoogle from '@/components/icons/IconGoogle.vue';
 import IconMicrosoft from '@/components/icons/IconMicrosoft.vue';
+
+const router = useRouter();
 
 import InputField from '@/components/ui/InputField.vue';
 import MainButton from '@/components/ui/MainButton.vue';
@@ -123,7 +126,8 @@ watch(passwordRef, () => {
       </div>
       <div v-if="!askPassword" class="w-full flex justify-center mt-4">
         <p class="opacity-50 text-white mr-1">Don't have an account?</p>
-        <span class="text-[#27FFC6]"> Sign up </span>
+
+        <span class="hover:opacity-60 hover:cursor-pointer text-[#27FFC6]" @click="router.push('/signup')"> Sign up </span>
       </div>
       <div v-if="!askPassword" class="w-full flex justify-center my-6">
       </div>
