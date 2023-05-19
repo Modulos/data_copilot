@@ -172,31 +172,51 @@ Data Copilot Trademark
 Data Copilot is a trademark of Modulos AG. 
 
 
+Current Maintainers
+===================
+- `Tim Rohner <https://github.com/leokster>`_
+- `Dennis Turp <https://github.com/mdturp>`_
 
 Contributors
 ============
 
-Project Leads
--------------
-- `Dennis Turp <https://github.com/mdturp>`_
-- `Tim Rohner <https://github.com/leokster>`_
+.. list-table::
+   :header-rows: 1
 
-Backend
--------
-- `Tim Rohner <https://github.com/leokster>`_
-- `Michael Röthlisberger <https://github/roethlisbergermichael>`_
-- `Dominic Stark <https://github.com/dominicstark>`_
-- `Tomkuch <https://github.com/tomkuch>`_
-- `Andrei Vaduva <https://github.com/andreiv-dev>`_
+   * - Project Leads
+     - Backend
+     - DevOps
+     - Frontend
+     - Design
+   * - `Dennis Turp <https://github.com/mdturp>`_
+     - `Tim Rohner <https://github.com/leokster>`_
+     - `Jiri Kralik <https://github.com/jirikralik>`_
+     - `Dennis Turp <https://github.com/mdturp>`_
+     - `Celina Jong <https://github.com/celinajong>`_
+   * - `Tim Rohner <https://github.com/leokster>`_
+     - `Dennis Turp <https://github.com/mdturp>`_
+     - `Serhii  Kyslyi <https://github.com/serhiikyslyi>`_
+     - `Oleh Lukashchuk <https://github.com/Olehlukashchuk96>`_
+     - 
+   * - 
+     - `Michael Röthlisberger <https://github/roethlisbergermichael>`_
+     - `Keven Le Moing <https://github.com/KevenLeMoing>`_
+     - 
+     - 
+   * - 
+     - `Dominic Stark <https://github.com/dominicstark>`_
+     - 
+     - 
+     - 
+   * - 
+     - `Tomkuch <https://github.com/tomkuch>`_
+     - 
+     - 
+     - 
+   * - 
+     - `Andrei Vaduva <https://github.com/andreiv-dev>`_
+     - 
+     - 
+     - 
 
-DevOps
-------
-- `Jiri Kralik <https://github.com/jirikralik>`_
-- `Serhii  Kyslyi <https://github.com/serhiikyslyi>`_
-- `Keven Le Moing <https://github.com/KevenLeMoing>`_
 
-
-Frontend
---------
-- `Dennis Turp <https://github.com/mdturp>`_
-- `Oleh Lukashchuk <https://github.com/Olehlukashchuk96>`_
