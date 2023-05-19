@@ -9,7 +9,7 @@ from celery.exceptions import SoftTimeLimitExceeded, TimeLimitExceeded
 from celery_app.config import Config
 from celery_app.crud.chats import crud_create_message
 from celery_app.database.psql import SessionLocal
-from celery_app.executors import pandasai_executor
+from celery_app.executors import getting_started_executor
 
 CONFIG = Config()
 
@@ -67,15 +67,15 @@ def save_result(
 
 @execution_app.task(name="execute_prompt", soft_time_limit=30)
 def execute_prompt(
-    prompt: str,
+    query: str,
     sas_url: str | None = None,
     artifact_config: dict | None = None,
     message_id: uuid.UUID | None = None,
 ) -> Tuple[str, str]:
-    """Execute the corresponding databits method and save the result
+    """Execute the corresponding method and save the result
 
     Args:
-        prompt (str): The prompt to execute.
+        query (str): The sql_query
         sas_url (str): The url of the file to be analyzed.
         artifact_config (dict): The config from which the file schema is extracted.
         message_id (uuid.UUID): _description_
@@ -87,8 +87,8 @@ def execute_prompt(
         schema = artifact_config.get("files", [dict()])[0].get("file_schema", {})
         file_type = artifact_config.get("files", [dict()])[0].get("file_type", "")
 
-        message = pandasai_executor.run(
-            sas_url, schema, file_type, prompt, schema.keys()
+        message = getting_started_executor.run(
+            sas_url, schema, file_type, query, schema.keys()
         )
 
         return message["text_content"], message["message_type"]
@@ -100,10 +100,11 @@ def execute_prompt(
 
     except Exception as e:
         logging.error(
-            f"An error occurred while executing databits method: {e} -- "
+            f"An error occurred while executing method: {e} -- "
             f"message_id: {message_id}"
         )
-        return "An error occurred while executing databits method", "error"
+        raise e
+        return "An error occurred while executing method", "error"
 
 
 @execution_app.task(
@@ -115,7 +116,7 @@ def execute_prompt(
 def translate_user_prompt(
     user_prompt: str, message_id: uuid.UUID, artifact_config: dict | None = None
 ) -> str:
-    """Forwards the user prompt to the next task.
+    """Translate user prompt into method to be called
 
     Args:
         user_prompt (str): Prompt passed from the user message to be executed.
@@ -123,10 +124,15 @@ def translate_user_prompt(
         artifact_config (dict):
 
     Returns:
-        str: the unchanged user prompt.
+        str:
     """
     try:
-        return user_prompt
+        schema = artifact_config.get("files", [dict()])[0].get("file_schema", {})
+
+        # put here your translation logic
+        query = "dummy query"
+
+        return query
 
     except SoftTimeLimitExceeded:
         logging.error(

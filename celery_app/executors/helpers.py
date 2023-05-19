@@ -1,4 +1,5 @@
 from enum import Enum
+from functools import wraps
 from typing import Any, Dict
 
 import simplejson
@@ -173,3 +174,26 @@ class Message:
                     ignore_nan=True,
                 ),
             }
+
+
+_custom_locations = {"volume": "shared-fs/"}
+
+
+def path_processor(func):
+    """
+    Decorator to process paths
+    """
+
+    @wraps(func)
+    def wrapper(path, *args, **kwargs):
+        if not path:
+            raise ValueError("Path cannot be empty")
+
+        if path.startswith("volume://"):
+            path = path.replace("volume://", _custom_locations["volume"]).replace(
+                "//", "/"
+            )
+
+        return func(path, *args, **kwargs)
+
+    return wrapper

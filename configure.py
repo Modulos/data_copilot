@@ -44,7 +44,7 @@ def main():
             compute_backend = "sql"
 
         elif backend == 2:
-            compute_backend = "pandasai"
+            compute_backend = "getting_started"
 
         env_file = {
             "APP_NAME": name,

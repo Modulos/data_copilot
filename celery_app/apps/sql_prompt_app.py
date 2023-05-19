@@ -73,7 +73,7 @@ def execute_prompt(
     artifact_config: dict | None = None,
     message_id: uuid.UUID | None = None,
 ) -> Tuple[str, str]:
-    """Execute the corresponding databits method and save the result
+    """Execute the corresponding method and save the result
 
     Args:
         query (str): The sql_query
@@ -99,10 +99,10 @@ def execute_prompt(
 
     except Exception as e:
         logging.error(
-            f"An error occurred while executing databits method: {e} -- "
+            f"An error occurred while executing method: {e} -- "
             f"message_id: {message_id}"
         )
-        return "An error occurred while executing databits method", "error"
+        return "An error occurred while executing method", "error"
 
 
 @execution_app.task(
@@ -114,7 +114,7 @@ def execute_prompt(
 def translate_user_prompt(
     user_prompt: str, message_id: uuid.UUID, artifact_config: dict | None = None
 ) -> str:
-    """Translate user prompt into databits method to be called
+    """Translate user prompt into method to be called
 
     Args:
         user_prompt (str): Prompt passed from the user message to be executed.

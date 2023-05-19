@@ -8,30 +8,8 @@ from sqlalchemy import create_engine, text
 
 from celery_app.executors import helpers
 
-custom_locations = {"volume": "shared-fs/"}
 
-
-def path_processor(func):
-    """
-    Decorator to process paths
-    """
-
-    @wraps(func)
-    def wrapper(path, *args, **kwargs):
-        if not path:
-            raise ValueError("Path cannot be empty")
-
-        if path.startswith("volume://"):
-            path = path.replace("volume://", custom_locations["volume"]).replace(
-                "//", "/"
-            )
-
-        return func(path, *args, **kwargs)
-
-    return wrapper
-
-
-@path_processor
+@helpers.path_processor
 def run(
     sas_url: str,
     schema: Dict[str, Any],
@@ -39,7 +17,7 @@ def run(
     sql_query: str,
     columns: Optional[List[str]] = None,
 ) -> Dict[str, Any]:
-    """Execute the databits command and return the correct json response.
+    """Execute the command and return the correct json response.
 
     Args:
         sas_url (str): The path to the dataset to operate on.
@@ -48,7 +26,6 @@ def run(
         columns (Optional[List[str]], optional): The columns to execute the
             command on. Defaults to None.
     """
-    # Set up the arguments passed to databits.
 
     match file_type:
         case "csv":
