@@ -61,6 +61,10 @@ These commands will clone the DataCopilot repository and run the setup process.
 
 During the setup process, you will be prompted to enter your openai API key. You can also enter it manually by editing the ``.dev.env`` file in the root directory of the repository after the installation.
 
+Choose `sql` as the compute backend. This will allow you to use the full functionality of DataCopilot. The getting_started compute backend is a limited version which will help you to get started with implementing your own logic. 
+Checkout the `Build your own Copilot` section for more information.
+
+
 Open DataCopilot in your browser: http://localhost
 
 
@@ -100,9 +104,9 @@ The DataCopilot system is composed of several services, each running in its own 
 
 - **Database:** This service runs a PostgreSQL database server, using the `postgres:latest` Docker image. The database data is stored in a Docker volume for persistence.
 
-- **Frontend:** The user interface of the application is provided by the frontend service, using the `data-copilot-frontend` Docker image.
+- **Frontend:** The user interface of the application is provided by the frontend service, using the `data-copilot-frontend` Docker image. The frontend framework is Vue3.
 
-- **Backend:** The main application logic is handled by the backend service. It uses the `data-copilot-backend` Docker image and interacts with the database and the Azure Storage.
+- **Backend:** The main application logic is handled by the backend service. It uses the `data-copilot-backend` Docker image and interacts with the database. The backend framework is `FastAPI <https://github.com/tiangolo/fastapi>`_.
 
 - **Adminer:** This service provides a web interface for managing the PostgreSQL database. It uses the `adminer` Docker image.
 
@@ -166,6 +170,26 @@ To start the service with hot reloading enabled, run the following command:
 This command will start the DataCopilot service in development mode. Now, whenever you make changes to your code, those changes will be immediately reflected in the running application.
 
 
+Build your own Copilot
+----------------------
+
+
+DataCopilot is not just a standalone application, but also a framework that you can use to build your own data processing and analysis tools. Here are the steps to get started:
+
+1. **Worker Logic:** The worker logic can be found in the `celery_app/apps` directory. You can modify the logic here to suit your specific needs.
+
+2. **Getting Started Example:** For a basic understanding of the worker logic, you can refer to the `celery_app/apps/getting_started_example.py` file. This file provides a simple example that can serve as a starting point for your custom logic.
+
+3. **Executor Logic:** The executor logic is contained in the `celery_app/executors/getting_started_executor.py` file. You can modify this file to customize how tasks are executed.
+
+4. **Supported File Types:** If you want to change the supported file types (e.g., extend support to PDF), you will need to configure this on the backend side in the `backend/config/config.py` file. Additionally, you need to implement the logic for handling the new file type in the `backend/routers/artifacts.py` file.
+
+5. **File Type Interaction:** Once you've configured the backend to support the new file type, you'll need to implement the specific logic for interacting with that file type on the worker side.
+
+6. **Return Types:** Currently, DataCopilot is configured to only return tables to the user. However, the framework supports other return types such as heatmaps, histograms, and barplots. You can see the implementation details for these types in the `getting_started_executor.py` file.
+
+With these steps, you can customize DataCopilot to handle your specific data processing and analysis tasks. Remember to thoroughly test your changes to ensure they work as expected.
+
 
 Data Copilot Trademark
 ======================
@@ -203,6 +227,16 @@ Contributors
      - `Keven Le Moing <https://github.com/KevenLeMoing>`_
      - 
      - 
+   * -
+     - `Keven Le Moing <https://github.com/KevenLeMoing>`_
+     -  
+     -  
+     -  
+   * - 
+     - `Andrei Vaduva <https://github.com/andreiv-dev>`_
+     - 
+     - 
+     - 
    * - 
      - `Dominic Stark <https://github.com/dominicstark>`_
      - 
@@ -210,11 +244,6 @@ Contributors
      - 
    * - 
      - `Tomkuch <https://github.com/tomkuch>`_
-     - 
-     - 
-     - 
-   * - 
-     - `Andrei Vaduva <https://github.com/andreiv-dev>`_
      - 
      - 
      - 
