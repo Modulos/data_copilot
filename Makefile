@@ -58,4 +58,5 @@ reset-db:
 	docker compose --env-file .dev.env --profile reset_db run --rm reset-db
 
 setup:
+	pip install -r requirements_dev.txt
 	python3 configure.py
