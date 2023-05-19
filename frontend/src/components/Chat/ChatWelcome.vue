@@ -48,16 +48,11 @@ onMounted(() => {
       :class="[showContent ? 'show-content' : '']"
     >
       <div class="description">
-        <span>Data Copilot is a </span
-        ><span class="white">conversational AI tool</span>
-        <span>that assists users in rapidly</span>
-        <span class="white">identifying</span> <span>and</span>
-        <span class="white">mitigating</span>
-        <span
-        >sources of noise, error, and bias in their dataset, which is a
-          critical step in the development of</span
-        >
-        <span class="white">trustworthy AI models</span>.
+        <span>
+          DataCopilot serves as a robust framework for building your
+          own prompt-based applications, enhancing user experience and
+          interaction.
+        </span>
       </div>
       <div
         v-if="route.name === 'chat-welcome' && !chatStore.isLoading"
@@ -66,15 +61,15 @@ onMounted(() => {
       >
         <MessageButton
           @input-message="inputMessage"
-          :text="'Please visualise column x of my dataset'"
+          :text="'What are the names of the columns in my data?'"
         />
         <MessageButton
           @input-message="inputMessage"
-          :text="'Does my column follow a gaussian distribution?'"
+          :text="'Compute the mean of all numeric columns'"
         />
         <MessageButton
           @input-message="inputMessage"
-          :text="'Please visualize my dataset?'"
+          :text="'Compute the variance of all columns?'"
         />
       </div>
       <div

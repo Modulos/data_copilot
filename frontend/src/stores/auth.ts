@@ -50,6 +50,19 @@ export const useAuthStore = defineStore({
       router.push('/');
     },
 
+    async signup(firstName: string, lastName: string,
+                 password: string, email: string) {
+
+      await usersApi.postUsersApiUsersPost(
+        {
+          'first_name': firstName,
+          'last_name': lastName,
+          password,
+          email,
+        })
+      await this.login(email, password);
+
+    },
     setToken(newToken: string) {
       const date = Date.now() + minutes;
       config.accessToken = newToken;

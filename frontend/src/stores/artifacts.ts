@@ -52,6 +52,16 @@ const useArtifactStore = defineStore({
       }
       return artifact;
     },
+
+    async deleteArtifact(artifactId: string) {
+      const artifactApi = initApi(ArtifactApi);
+      const artifact = await artifactApi.deleteArtifactIdArtifactidApiArtifactsArtifactIdDelete(
+        artifactId,
+      );
+      // Remove the deleted artifact from the store
+      this.artifacts = this.artifacts.filter((a) => a.id !== artifactId);
+      return artifact;
+    }
   },
 });
 

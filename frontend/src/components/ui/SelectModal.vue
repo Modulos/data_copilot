@@ -6,7 +6,7 @@ import useArtifactStore from '@/stores/artifacts';
 import useChatsStore from '@/stores/chats';
 import ModalClose from '@/assets/icons/svg/modal-close.svg?component';
 import DatasetIcon from '@/assets/icons/svg/dataset-icon.svg?component';
-// import DatasetDelete from '@/assets/icons/svg/dataset-delete.svg?component';
+import DatasetDelete from '@/assets/icons/svg/dataset-delete.svg?component';
 // import DatasetEdit from '@/assets/icons/svg/dataset-edit.svg?component';
 import DatasetSynced from '@/assets/icons/svg/dataset-synced.svg?component';
 
@@ -40,6 +40,12 @@ const openChat = async (id: string, name: string) => {
     router.push(`/chat-welcome/${store.activeChat}`);
   }
 };
+
+const deleteArtifact = async (id: string) => {
+  emit('closeModal');
+  await artifactsStore.deleteArtifact(id);
+};
+
 </script>
 
 <template>
@@ -51,9 +57,11 @@ const openChat = async (id: string, name: string) => {
           v-for="dataset in artifactsStore.artifacts"
           :key="dataset.id"
           class="dataset flex justify-between items-center"
-          @click="openChat(dataset.id, dataset.name)"
+          
         >
-          <div class="dataset__left flex mr-2">
+          <div
+            class=" dataset__left flex grow mr-2 hover:opacity-60"
+            @click="openChat(dataset.id, dataset.name)">
             <DatasetIcon />
             <div class="dataset__info flex flex-col">
               <h3 class="dataset__name">{{ dataset.name }}</h3>
@@ -63,12 +71,9 @@ const openChat = async (id: string, name: string) => {
             </div>
           </div>
           <div class="dataset__right flex">
-            <span class="dataset__size">146kb</span>
-            <!-- temporary remove buttons , implement after backend is ready-->
-            <!-- <div class="dataset__icons flex">
-              <DatasetEdit class="dataset-edit" />
-              <DatasetDelete />
-            </div> -->
+            <div class="dataset__icons flex">
+              <DatasetDelete @click="deleteArtifact(dataset.id)"/>
+            </div>
           </div>
         </div>
       </div>
@@ -134,7 +139,7 @@ const openChat = async (id: string, name: string) => {
         .dataset__icons {
           svg {
             cursor: pointer;
-            opacity: 0.5;
+            opacity: 0.6;
           }
           svg:hover {
             opacity: 1;
@@ -143,9 +148,6 @@ const openChat = async (id: string, name: string) => {
             margin-right: 10px;
           }
         }
-      }
-      .dataset:hover {
-        opacity: 0.6;
       }
       .dataset:not(:last-child) {
         margin-bottom: 12px;
