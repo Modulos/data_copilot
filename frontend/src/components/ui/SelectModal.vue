@@ -42,7 +42,6 @@ const openChat = async (id: string, name: string) => {
 };
 
 const deleteArtifact = async (id: string) => {
-  emit('closeModal');
   await artifactsStore.deleteArtifact(id);
 };
 

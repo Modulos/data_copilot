@@ -56,6 +56,7 @@ function getText(componentData: any) {
           <BarChartPlot v-else-if="component.type === 'plot_bar'" :inputData="component" />
           <CorrelationMatrix v-else-if="component.type === 'plot_heatmap'" :inputData="component" />
           <div v-else-if="component.type === 'text'" v-html="getText(component)" />
+          <div class="my-3" v-if="component.config?.show_description"> {{ component.description }}</div>
         </div>
       </div>
     </div>

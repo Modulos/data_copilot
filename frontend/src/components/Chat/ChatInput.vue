@@ -104,7 +104,7 @@ onMounted(() => {
             id="mainInput"
             v-on:keyup.enter="sendMessage"
             v-model="inputText"
-            :disabled="route.name === 'home'"
+            :disabled="route.name === 'home' || chats.artifactVersionId === null"
             type="text"
             class="input m-0 resize-none border-0 bg-transparent p-0 pl-2 pr-7 outline-none md:pl-0 w-full"
             placeholder="Ask your question about your dataset here"
@@ -112,7 +112,7 @@ onMounted(() => {
           <button
             type="button"
             v-on:click="sendMessage"
-            :disabled="route.name === 'home' || messages.inputDisabled"
+            :disabled="route.name === 'home' || messages.inputDisabled || chats.artifactVersionId === null"
             class="p-1 rounded-md text-gray-500 md:bottom-2.5 md:right-2 hover:bg-gray-100 disabled:hover:bg-transparent"
           >
             <IconSend class="w-4 h-4" />
