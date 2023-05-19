@@ -67,7 +67,8 @@ services:
       - database
     volumes:
       - ./backend:/home/fastapi_user/app/backend
-      - ./shared-fs:/home/fastapi_user/app/shared-fs
+      - shared-fs:/home/fastapi_user/app/shared-fs
+    user: "1000:1000"
     command: uvicorn backend.main:app --host 0.0.0.0 --port 80 --reload --log-level debug
 
   adminer:
@@ -93,15 +94,6 @@ services:
       - 6379:6379
     command: redis-server --appendonly yes
 
-  rq-dashboard:
-    image: eoranged/rq-dashboard
-    container_name: rq-dashboard
-    restart: always
-    ports:
-      - 9181:9181
-    environment:
-      RQ_DASHBOARD_REDIS_URL: ${REDIS_URL}
-
   celery-worker:
     &worker
     image: data-copilot-celery-worker
@@ -119,7 +111,8 @@ services:
 
     volumes:
       - ./celery_app:/home/celery_user/app/celery_app
-      - ./shared-fs:/home/celery_user/app/shared-fs
+      - shared-fs:/home/celery_user/app/shared-fs
+    user: "1000:1000"
     command: watchmedo auto-restart -d ./celery_app/ -p "*.py;*.cfg" --recursive -- celery -A celery_app.worker.execution_app worker --loglevel=info --concurrency=1
 
   flower:
@@ -139,3 +132,4 @@ services:
 
 volumes:
   db-storage:
+  shared-fs:

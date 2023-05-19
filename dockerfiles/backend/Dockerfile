@@ -1,8 +1,14 @@
 FROM python:3.10-slim
 
 # Create a non-root user and switch to it
-RUN useradd -m fastapi_user
+RUN addgroup --gid 1000 fastapi_group && \
+    adduser --uid 1000 --ingroup fastapi_group --home /home/fastapi_user --shell /bin/sh --disabled-password --gecos "" fastapi_user
+
 USER fastapi_user
+
+# Set up directories and permissions for our volumes
+RUN mkdir -p /home/fastapi_user/app/shared-fs && \
+    chown -R fastapi_user:fastapi_group /home/fastapi_user/app/shared-fs
 
 # Install the application
 WORKDIR /home/fastapi_user/app
