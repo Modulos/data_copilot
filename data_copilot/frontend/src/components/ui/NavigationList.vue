@@ -9,10 +9,10 @@ import IconGavel from '@/components/icons/IconGavel.vue';
 import useMessagesStore from '@/stores/messages';
 import useChatsStore from '@/stores/chats';
 import { useAuthStore } from '@/stores/auth';
+import useModalStore from '@/stores/modal';
 import IconYoutube from '../icons/IconYoutube.vue';
 import IconLinkedin from '../icons/IconLinkedin.vue';
 import IconTwitter from '../icons/IconTwitter.vue';
-import useModalStore from '@/stores/modal';
 
 defineProps({
   onlySocial: {
@@ -40,7 +40,6 @@ function routeToPage(url: string) {
 const logout = () => {
   auth.logout();
 };
-
 
 async function deleteAllChat() {
   modalStore.fillModal('Delete all chats', 'Would you like to permanently delete all chats?');

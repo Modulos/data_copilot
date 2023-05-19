@@ -61,7 +61,7 @@ const useArtifactStore = defineStore({
       // Remove the deleted artifact from the store
       this.artifacts = this.artifacts.filter((a) => a.id !== artifactId);
       return artifact;
-    }
+    },
   },
 });
 
