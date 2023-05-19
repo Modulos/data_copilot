@@ -43,7 +43,7 @@ const logout = () => {
 
 
 async function deleteAllChat() {
-  modalStore.fillModal('Delete chat', 'Would you like to permanently delete all chats?');
+  modalStore.fillModal('Delete all chats', 'Would you like to permanently delete all chats?');
   modalStore.openModal(clearChat);
 }
 
