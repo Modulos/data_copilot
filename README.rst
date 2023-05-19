@@ -86,6 +86,10 @@ Reset DataCopilot
 Architecture
 ============
 
+.. image:: assets/architecture.svg
+   :align: center
+   :width: 100%
+
 The DataCopilot system is composed of several services, each running in its own Docker container. These services interact to provide a comprehensive data processing and management solution.
 
 - **Nginx:** This service acts as a reverse proxy for the backend and adminer services. It uses the `data-copilot-nginx` Docker image and listens on port 80.
@@ -99,8 +103,6 @@ The DataCopilot system is composed of several services, each running in its own 
 - **Adminer:** This service provides a web interface for managing the PostgreSQL database. It uses the `adminer` Docker image.
 
 - **Redis Queue:** This service manages a job queue for asynchronous tasks. It uses the `redis:alpine` Docker image.
-
-- **RQ Dashboard:** This service provides a web interface for managing the Redis job queue. It uses the `eoranged/rq-dashboard` Docker image.
 
 - **Celery Worker:** This service executes the asynchronous tasks from the Redis queue. It uses the `data-copilot-celery-worker` Docker image.
 
