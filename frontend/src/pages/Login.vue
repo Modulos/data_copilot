@@ -7,15 +7,12 @@ import useBreakpoints from '@/hooks/useBreakpoints';
 import { useRouter } from 'vue-router';
 
 import Logo from '@/assets/icons/svg/logo-landing.svg?component';
-import IconGoogle from '@/components/icons/IconGoogle.vue';
-import IconMicrosoft from '@/components/icons/IconMicrosoft.vue';
-
-const router = useRouter();
 
 import InputField from '@/components/ui/InputField.vue';
 import MainButton from '@/components/ui/MainButton.vue';
 
 const { isMobile } = useBreakpoints();
+const router = useRouter();
 
 function onSubmit(values: any) {
   const authStore = useAuthStore();

@@ -21,7 +21,7 @@ const useArtifactStore = defineStore({
   actions: {
     async getArtifacts() {
       const artifactApi = initApi(ArtifactApi);
-      const artifacts = await artifactApi.getArtifactsApiArtifactsGet();
+      const artifacts = await artifactApi.getArtifactsApiArtifactsGet(undefined, 'active');
       this.artifacts = artifacts.data;
     },
     async createArtifact(fileName: string) {

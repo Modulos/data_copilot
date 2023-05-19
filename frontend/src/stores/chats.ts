@@ -88,15 +88,20 @@ const useChatsStore = defineStore({
         );
         if (activeChat) {
           const artifactApi = initApi(ArtifactApi);
-          const artifact = await artifactApi.getArtifactsIdArtifactidApiArtifactsArtifactIdGet(
-            activeChat.artifact_id,
-          );
-          this.activeDatasetName = artifact.data.name;
-          const artifactVersion = await artifactApi.getArtifactsIdArtifactidVersionsApiArtifactsArtifactIdVersionsGet(
-            activeChat.artifact_id,
-          );
+          try {
+            const artifact = await artifactApi.getArtifactsIdArtifactidApiArtifactsArtifactIdGet(
+              activeChat.artifact_id,
+            );
+            this.activeDatasetName = artifact.data.name;
+            const artifactVersion = await artifactApi.getArtifactsIdArtifactidVersionsApiArtifactsArtifactIdVersionsGet(
+              activeChat.artifact_id,
+            );
 
-          this.artifactVersionId = artifactVersion.data[0].id;
+            this.artifactVersionId = artifactVersion.data[0].id;
+            } catch (error) {
+              this.artifactVersionId = null;
+              this.activeDatasetName = 'Dataset not found';
+          }
         }
       } else {
         this.activeDatasetName = 'No Dataset selected';
