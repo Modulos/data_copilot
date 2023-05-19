@@ -21,6 +21,7 @@ from backend.crud.chats import (
 from backend.database.psql import get_db
 from backend.dependencies.artifacts import (
     check_if_user_has_access_to_artifact,
+    check_if_artifact_is_active,
     get_artifact_from_artifact_version_dependency,
     get_artifact_version_dependency,
 )
@@ -297,6 +298,7 @@ async def post_chats_chatid_messages_messageid(
             artifact_version, db=db
         )
         await check_if_user_has_access_to_artifact(artifact, current_user)
+        await check_if_artifact_is_active(artifact)
 
         if not exists(os.path.join(artifact_version.artifact_uri, "config.json")):
             raise HTTPException(

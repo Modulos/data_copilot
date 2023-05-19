@@ -9,7 +9,7 @@ from backend.crud.artifacts import (
 )
 from backend.database.psql import get_db
 from backend.dependencies.authentication import get_current_active_user
-from backend.schemas.artifacts import Artifact, ArtifactVersion
+from backend.schemas.artifacts import Artifact, ArtifactVersion, ArtifactStatus
 from backend.schemas.authentication import User
 
 
@@ -137,4 +137,22 @@ async def check_if_user_has_access_to_artifact(
     """
     if current_user.id != artifact.user_id:
         raise HTTPException(status_code=400, detail="Access denied")
+    return True
+
+
+async def check_if_artifact_is_active(
+    artifact: Artifact = Depends(get_artifact_dependency),
+) -> bool:
+    """Checks if artifact is active.
+
+    Args:
+        artifact (Artifact): The artifact.
+
+    Raises:
+        HTTPException: If the artifact is not active.
+
+    Returns (bool): True if the artifact is active.
+    """
+    if artifact.status != ArtifactStatus.active:
+        raise HTTPException(status_code=404, detail="Artifact has been deleted")
     return True
