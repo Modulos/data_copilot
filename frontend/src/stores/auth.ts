@@ -24,7 +24,7 @@ interface State {
 const token = localStorage.getItem('token');
 const tokenExpiresAt = localStorage.getItem('tokenExpiresAt');
 const me = localStorage.getItem('user');
-const minutes = 1000 * 60 * 27;
+const minutes = 1000 * 60 * 15;
 
 export const useAuthStore = defineStore({
   id: 'auth',
@@ -92,6 +92,7 @@ export const useAuthStore = defineStore({
 
     async refresh() {
       const response = await authApi.refreshTokenApiTokenRefreshPost();
+      console.log(response.data)
 
       this.setToken(response.data.access_token);
     },
