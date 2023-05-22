@@ -243,7 +243,7 @@ Contributors
      - 
      - 
    * - 
-     - `Tomkuch <https://github.com/tomkuch>`_
+     - `Tomasz Kucharski <https://github.com/tomkuch>`_
      - 
      - 
      - 
