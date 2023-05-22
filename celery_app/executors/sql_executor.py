@@ -5,7 +5,7 @@ from typing import Any, Dict, List, Optional
 import pandas as pd
 from pandas import read_excel
 from sqlalchemy import create_engine, text
-
+import json
 from celery_app.executors import helpers
 
 
@@ -29,7 +29,7 @@ def run(
 
     match file_type:
         case "csv":
-            dataset = pd.read_csv(sas_url, sep=None, dtype=object)
+            dataset = pd.read_csv(sas_url, sep=None, encoding="utf-8-sig", dtype=object)
         case "xls" | "xlsx":
             dataset = read_excel(sas_url, dtype={"dteday": str})
         case _:
@@ -37,6 +37,11 @@ def run(
 
     if len(dataset.index) == 0:
         raise Exception(f"Wrong '{sas_url}' content")
+
+    if sql_query[0] == "TEXT":
+        message = helpers.Message(helpers.MessageTypes.TEXT, "SQL")
+        message.add_text(sql_query[1])
+        return message.to_dict()
 
     engine = create_engine("sqlite:///:memory:")
     try:
@@ -47,7 +52,7 @@ def run(
         dataset.to_sql("df", engine, if_exists="replace", index=False)
 
         # Your query variable
-        query = text(sql_query)
+        query = text(sql_query[1].replace("```", "").strip())
 
         # Create a connection and execute the query
         with engine.connect() as connection:
@@ -67,7 +72,7 @@ def run(
     table_component.description = "The Result of your SQL Query"
     table_component.config = {
         "show_title": True,
-        "show_description": True,
+        "show_description": False,
         "highlight_columns": [],
     }
     table_component.data = result_df.to_dict("list")

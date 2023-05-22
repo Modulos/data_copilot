@@ -107,7 +107,7 @@ def execute_prompt(
 
 @execution_app.task(
     name="translating_user_prompt",
-    soft_time_limit=8,
+    soft_time_limit=60,
     autoretry_for=(TimeLimitExceeded, openai.error.RateLimitError),
     retry_kwargs={"max_retries": 3, "countdown": 30},
 )
@@ -143,7 +143,6 @@ def translate_user_prompt(
             f"Prompt: {user_prompt} --"
             f"message_id: {message_id}"
         )
-        raise (e)
 
 
 @execution_app.task(name="execute_user_message")

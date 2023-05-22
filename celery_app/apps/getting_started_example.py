@@ -103,7 +103,6 @@ def execute_prompt(
             f"An error occurred while executing method: {e} -- "
             f"message_id: {message_id}"
         )
-        raise e
         return "An error occurred while executing method", "error"
 
 
@@ -148,7 +147,6 @@ def translate_user_prompt(
             f"Prompt: {user_prompt} --"
             f"message_id: {message_id}"
         )
-        raise (e)
 
 
 @execution_app.task(name="execute_user_message")

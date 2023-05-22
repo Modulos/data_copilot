@@ -330,7 +330,7 @@ async def post_artifacts_id_artifactid_versions(
         file_type = CONFIG.ALLOWED_ARTIFACTS_CONTENT_TYPES[file.content_type]
         match file_type:
             case "csv":
-                data_frame = pd.read_csv(file.file, sep=None)
+                data_frame = pd.read_csv(file.file, sep=None, encoding="utf-8-sig")
             case "xls" | "xlsx":
                 data_frame = pd.read_excel(await file.read(), dtype={"dteday": str})
 

@@ -54,8 +54,8 @@ run-dev: build-backend build-celery-worker build-celery-flower build-frontend-de
 install-frontend-dependencies: build-frontend-dev
 	docker run --rm -v ${PWD}/frontend:/app -w /app $(IMAGE_NAME_FRONTEND)-dev npm install
 
-reset-db:
-	docker compose --env-file .dev.env --profile reset_db run --rm reset-db
+reset-db: build-backend
+	docker compose -f docker-compose-dev.yml --env-file .dev.env --profile reset_db run --rm reset-db
 
 setup:
 	python3 configure.py
