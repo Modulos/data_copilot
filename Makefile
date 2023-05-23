@@ -20,10 +20,10 @@ build-celery-flower:
 	docker build -t $(IMAGE_NAME_CELERY_FLOWER) -f dockerfiles/flower/Dockerfile .
 
 build-frontend-dev:
-	docker build -t $(IMAGE_NAME_FRONTEND)-dev -f dockerfiles/frontend/Dockerfile-dev frontend
+	docker build -t $(IMAGE_NAME_FRONTEND)-dev -f dockerfiles/frontend/Dockerfile-dev data_copilot/frontend
 
 build-frontend:
-	docker build -t $(IMAGE_NAME_FRONTEND) -f dockerfiles/frontend/Dockerfile frontend
+	docker build -t $(IMAGE_NAME_FRONTEND) -f dockerfiles/frontend/Dockerfile data_copilot/frontend
 
 build-nginx:
 	docker build -t $(IMAGE_NAME_NGINX) -f dockerfiles/nginx/Dockerfile .
@@ -34,11 +34,9 @@ db-schema:
 	eralchemy2 -i "postgresql://$(POSTGRES_USER):$(POSTGRES_PASSWORD)@$(POSTGRES_HOST):$(POSTGRES_PORT)/$(POSTGRES_DB)" -o database.png
 
 client-sdk:
-	cp tools/create_openapi_json.py .
-	set -a && source .dev.env && export ENVIRONMENT=TEST && set +a && python create_openapi_json.py
-	docker run --rm -v ${PWD}:/local openapitools/openapi-generator-cli generate -i /local/openapi.json --output /local/frontend/src/client -g typescript-axios
+	set -a && source .dev.env && export ENVIRONMENT=TEST && set +a && python -m data_copilot.tools.create_openapi_json
+	docker run --rm -v ${PWD}:/local openapitools/openapi-generator-cli generate -i /local/openapi.json --output /local/data_copilot/frontend/src/client -g typescript-axios
 	rm openapi.json
-	rm create_openapi_json.py
 
 check-client-sdk:
 	make client-sdk

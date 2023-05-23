@@ -54,7 +54,7 @@ dynamic = ["version"]
 
 
 [tool.setuptools.packages.find]
-include = ["backend", "fronted"]
+include = ["data_copilot"]
 
 [tool.setuptools_scm]
 write_to = "_version.py"

@@ -14,8 +14,8 @@ RUN mkdir -p /home/celery_user/app/shared-fs && \
 WORKDIR /home/celery_user/app
 COPY dockerfiles/celery-worker/requirements.txt /tmp/requirements.txt
 RUN pip install --user -r /tmp/requirements.txt
-COPY --chown=celery_user:celery_user celery_app /home/celery_user/app/celery_app
-COPY --chown=celery_user:celery_user db_models /home/celery_user/app/db_models
+COPY --chown=celery_user:celery_user data_copilot/celery_app /home/celery_user/app/data_copilot/celery_app
+COPY --chown=celery_user:celery_user data_copilot/db_models /home/celery_user/app/data_copilot/db_models
 ARG ENV
 ENV ENV=${ENV} \
     PYTHONPATH=/home/celery_user/app/ \

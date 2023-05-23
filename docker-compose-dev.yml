@@ -36,7 +36,7 @@ services:
     ports:
       - "8080:80"
     volumes:
-      - ./frontend:/app
+      - ./data_copilot/frontend:/app
     command: npm run dev -- --port 80 --host
     depends_on:
       - install-frontend-dependencies
@@ -69,7 +69,7 @@ services:
       - ./backend:/home/fastapi_user/app/backend
       - shared-fs:/home/fastapi_user/app/shared-fs
     user: "1000:1000"
-    command: uvicorn backend.main:app --host 0.0.0.0 --port 80 --reload --log-level debug
+    command: uvicorn data_copilot.backend.main:app --host 0.0.0.0 --port 80 --reload --log-level debug
 
   adminer:
     image: adminer
@@ -80,7 +80,7 @@ services:
 
   reset-db:
     <<: *backend
-    command: python backend/setup/setup.py
+    command: python data_copilot/backend/setup/setup.py
     ports:
       - "8001:80"
     profiles:
@@ -113,7 +113,7 @@ services:
       - ./celery_app:/home/celery_user/app/celery_app
       - shared-fs:/home/celery_user/app/shared-fs
     user: "1000:1000"
-    command: watchmedo auto-restart -d ./celery_app/ -p "*.py;*.cfg" --recursive -- celery -A celery_app.worker.execution_app worker --loglevel=info --concurrency=1
+    command: watchmedo auto-restart -d ./data_copilot/celery_app/ -p "*.py;*.cfg" --recursive -- celery -A data_copilot.celery_app.worker.execution_app worker --loglevel=info --concurrency=1
 
   flower:
     image: data-copilot-celery-flower

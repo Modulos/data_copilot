@@ -57,7 +57,7 @@ services:
     volumes:
       - shared-fs:/home/fastapi_user/app/shared-fs
     user: "1000:1000"
-    command: uvicorn backend.main:app --host 0.0.0.0 --port 80 --log-level warning
+    command: uvicorn data_copilot.backend.main:app --host 0.0.0.0 --port 80 --log-level warning
 
   adminer:
     image: adminer
@@ -68,7 +68,7 @@ services:
 
   reset-db:
     <<: *backend
-    command: python backend/setup/setup.py
+    command: python data_copilot/backend/setup/setup.py
     ports:
       - "8001:80"
     profiles:
@@ -100,7 +100,7 @@ services:
     volumes:
       - shared-fs:/home/celery_user/app/shared-fs
     user: "1000:1000"
-    command: celery -A celery_app.worker.execution_app worker
+    command: celery -A data_copilot.celery_app.worker.execution_app worker
 
   flower:
     image: data-copilot-celery-flower
