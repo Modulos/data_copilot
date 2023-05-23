@@ -3,26 +3,29 @@ from dotenv import load_dotenv
 import subprocess
 import threading
 import data_copilot
-import pandas
+import click
 
-load_dotenv(".dev.local.env")
-env = {
-    "JWT_SECRET_KEY": subprocess.check_output("openssl rand -hex 32", shell=True)
-    .decode("utf-8")
-    .strip(),
-    "BACKEND_HOST": "localhost:8000/api",
-    "DB_CONNECTION_STRING": "sqlite:///data_copilot.db",
-    "REDIS_URL": "redis://localhost:6379/0",
-    "OPENAI_API_KEY": os.environ.get("OPENAI_API_KEY"),
-    "STORAGE_BACKEND": "volume:///data",
-    "ENVIRONMENT": "DEVELOPMENT",
-    "COMPUTE_BACKEND": "sql",
-    "PATH": os.environ.get("PATH", ""),
-    "PYTHONPATH": os.environ.get("PYTHONPATH", ""),
-    "AZURE_STORAGE_ACCOUNT_KEY": "",
-    "AZURE_STORAGE_ACCOUNT_NAME": "",
-    "CONTAINER_NAME": "",
-}
+
+def get_envs():
+    env = {
+        "JWT_SECRET_KEY": subprocess.check_output("openssl rand -hex 32", shell=True)
+        .decode("utf-8")
+        .strip(),
+        "BACKEND_HOST": "localhost:8000/api",
+        "DB_CONNECTION_STRING": "sqlite:///data_copilot.db",
+        "REDIS_URL": "redis://localhost:6379/0",
+        # "REDIS_URL": f"filesystem://broker",
+        "OPENAI_API_KEY": os.environ.get("OPENAI_API_KEY"),
+        "STORAGE_BACKEND": "volume:///data",
+        "ENVIRONMENT": "DEVELOPMENT",
+        "COMPUTE_BACKEND": "sql",
+        "PATH": os.environ.get("PATH", ""),
+        "PYTHONPATH": os.environ.get("PYTHONPATH", ""),
+        "AZURE_STORAGE_ACCOUNT_KEY": "",
+        "AZURE_STORAGE_ACCOUNT_NAME": "",
+        "CONTAINER_NAME": "",
+    }
+    return env
 
 
 def start_backend_server():
@@ -37,7 +40,7 @@ def start_backend_server():
             "--log-level",
             "debug",
         ],
-        env=env,
+        env=get_envs(),
         stdout=subprocess.PIPE,  # Capture stdout
         stderr=subprocess.STDOUT,  # Redirect stderr to stdout
         universal_newlines=True,  # Enable text mode for stdout
@@ -85,7 +88,7 @@ def start_worker():
             "data_copilot.celery_app.worker.execution_app",
             "worker",
         ],
-        env=env,
+        env=get_envs(),
         stdout=subprocess.PIPE,  # Capture stdout
         stderr=subprocess.STDOUT,  # Redirect stderr to stdout
         universal_newlines=True,  # Enable text mode for stdout
@@ -109,7 +112,18 @@ def kill_process(process):
         process = None
 
 
-if __name__ == "__main__":
+@click.command()
+def main():
+    load_dotenv(".env")
+    if os.environ.get("OPENAI_API_KEY") is None:
+        key = click.prompt("OpenAI API Key?", type=str, default="")
+
+        # append to .env file and create if not exist
+        with open(".env", "a") as f:
+            f.write(f"OPENAI_API_KEY={key}\n")
+
+    load_dotenv(".env")
+
     worker_process = start_worker()
     redis_process = start_redis()
     backend_process = start_backend_server()
@@ -140,3 +154,7 @@ if __name__ == "__main__":
         kill_process(worker_process)
 
     stdout_thread.join()
+
+
+if __name__ == "__main__":
+    main()

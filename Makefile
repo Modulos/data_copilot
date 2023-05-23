@@ -9,6 +9,27 @@ IMAGE_NAME_CELERY_WORKER=data-copilot-celery-worker
 IMAGE_NAME_CELERY_FLOWER=data-copilot-celery-flower
 IMAGE_NAME_FRONTEND=data-copilot-frontend
 
+clean: clean-build clean-pyc clean-test ## remove all build, test, coverage and Python artifacts
+
+clean-build: ## remove build artifacts
+	rm -fr build/
+	rm -fr dist/
+	rm -fr .eggs/
+	find . -name '*.egg-info' -exec rm -fr {} +
+	find . -name '*.egg' -exec rm -rf {} +
+
+clean-pyc: ## remove Python file artifacts
+	find . -name '*.pyc' -exec rm -f {} +
+	find . -name '*.pyo' -exec rm -f {} +
+	find . -name '*~' -exec rm -f {} +
+	find . -name '__pycache__' -exec rm -fr {} +
+
+clean-test: ## remove test and coverage artifacts
+	rm -fr .tox/
+	rm -f .coverage
+	rm -fr htmlcov/
+	rm -fr .pytest_cache
+
 # docker build makefile
 build-backend:
 	DOCKER_BUILDKIT=1 docker build -t $(IMAGE_NAME_BACKEND) -f dockerfiles/backend/Dockerfile .
@@ -24,6 +45,9 @@ build-frontend-dev:
 
 build-frontend:
 	docker build -t $(IMAGE_NAME_FRONTEND) -f dockerfiles/frontend/Dockerfile data_copilot/frontend
+
+build-frontend-locally:
+	cd data_copilot/frontend && npm run build
 
 build-nginx:
 	docker build -t $(IMAGE_NAME_NGINX) -f dockerfiles/nginx/Dockerfile .
@@ -58,5 +82,12 @@ reset-db: build-backend
 setup:
 	python3 configure.py
 
-launch-db:
-	docker compose -f docker-compose-dev.yml --env-file .dev.env up database adminer
+dist: clean build-frontend-locally ## builds source and wheel package
+	python3 -m build
+	ls -l dist
+
+install: clean ## install the package to the active Python's site-packages
+	pip install .
+
+install-dev: clean ## install the package to the active Python's site-packages
+	pip install -e .[dev]
