@@ -7,24 +7,19 @@ def generate_sql_query(prompt, columns):
     columns = harmonize_column_names(columns)
     cols_text = ", ".join(["'" + col + "'" for col in columns])
 
-    context = (
-        "You are an assistant which helps a user to translate "
-        "a business question he has about a dataset to a SQL query. "
-        "You don't execute the query on the data yourself. "
-        f"The column names are:{cols_text}\n"
-        "You know only SQLite. \n"
-    )
-    rule_1 = (
-        "You are only allowed to return a single character "
-        "Y or N. Y means you can create a SQL query to answer "
-        "the question of the user. N means you can't create a "
+    rule_1 = "You are an assistant which helps a user to translate a business question he has about a dataset to a SQL query. You don't execute the query on the data yourself. You are only allowed to write SQL queries that are compatible with SQLite."
+
+    prompt_1 = (
+        "Please answer if the following user question can be answered with an sql query and no additional text: "
+        f"{prompt}\n"
+        "The table is called: df \n"
+        f"The column name of the data are: {cols_text}"
+        "Answer [yes/no]: "
     )
 
     messages = [
-        {"role": "system", "content": context},
         {"role": "system", "content": rule_1},
-        {"role": "user", "content": "User Pormpt: " + prompt},
-        {"role": "system", "content": "Y/N: "},
+        {"role": "user", "content": prompt_1},
     ]
 
     response = (
@@ -41,20 +36,18 @@ def generate_sql_query(prompt, columns):
     if response.lower() in ("y", "yes"):
         response_type = "SQL"
 
-        rule_2 = (
-            "You are only allowed to write SQL queries "
-            "on a table called df. The table has the same "
-            "columns as the dataset. Return the SQL query "
-            "as a string. Your answer must be directly executable "
-            "No additional text is allowed "
-            "Write nice column aliases. "
-            "for the following question: "
+        rule_2 = "You are an assistant which helps a user to translate a business question he has about a dataset to a SQL query. You don't execute the query on the data yourself. You are only allowed to write SQL queries that are compatible with SQLite."
+
+        prompt_2 = (
+            "Please answer the following user question with an sql query and no additional text: "
+            f"{prompt}\n"
+            "The table is called: df \n"
+            f"The column name of the data are: {cols_text}"
+            "SQLite Query:"
         )
         messages = [
-            {"role": "system", "content": context},
             {"role": "system", "content": rule_2},
-            {"role": "user", "content": "User Pormpt: " + prompt},
-            {"role": "system", "content": "---SQLITE Query---"},
+            {"role": "user", "content": prompt_2},
         ]
 
         response = (
@@ -68,19 +61,19 @@ def generate_sql_query(prompt, columns):
 
     elif response.lower() in ("n", "no"):
         response_type = "TEXT"
-        rule_3 = (
-            "Given the user prompt it is not possible to create "
-            "a query on the date to answer the question of the user. "
-            "Please ask the user to rephrase the question. "
-            "The user is not a programmer. He is a business user. "
-            "He is not familiar with SQL. "
+        rule_3 = "You are an assistant which helps a user to translate a business question he has about a dataset to a SQL query. You don't execute the query on the data yourself. You are only allowed to write SQL queries that are compatible with SQLite."
+
+        prompt_3 = (
+            "Please explain why it is not possible to translate the following question to sql: "
+            f"{prompt}\n"
+            "The table is called: df \n"
+            f"The column name of the data are: {cols_text}"
+            "Your Answer:"
         )
 
         messages = [
-            {"role": "system", "content": context},
             {"role": "system", "content": rule_3},
-            {"role": "user", "content": "User Pormpt: " + prompt},
-            {"role": "system", "content": "Your explanation: "},
+            {"role": "user", "content": prompt_3},
         ]
 
         response = (

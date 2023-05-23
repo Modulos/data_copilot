@@ -52,11 +52,7 @@ def main():
             "JWT_SECRET_KEY": jwtsecretkey,
             "OPENAI_API_KEY": openaiapikey,
             "STORAGE_BACKEND": "volume:///data",
-            "POSTGRES_HOST": "database",
-            "POSTGRES_PORT": "5432",
-            "POSTGRES_DB": "postgres",
-            "POSTGRES_USER": "postgres",
-            "POSTGRES_PASSWORD": "postgres",
+            "DB_CONNECTION_STRING": "postgresql://postgres:postgres@localhost:5432/postgres",
             "REDIS_URL": "redis://redis-queue:6379/0",
             "COMPUTE_BACKEND": compute_backend,
         }

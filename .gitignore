@@ -180,3 +180,6 @@ __backend_larger
 
 *.env
 shared-fs
+appendonlydir/
+dump.rdb
+data_copilot.db
