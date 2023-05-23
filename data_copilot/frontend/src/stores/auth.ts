@@ -95,7 +95,7 @@ export const useAuthStore = defineStore({
 
     async refresh() {
       const response = await authApi.refreshTokenApiTokenRefreshPost();
-      console.log(response.data)
+      console.log(response.data);
 
       this.setToken(response.data.access_token);
     },

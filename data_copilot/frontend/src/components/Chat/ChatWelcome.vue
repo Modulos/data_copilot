@@ -41,10 +41,12 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="chat__wrapp flex flex-col items-center text-sm w-full"
+  <div
+    class="chat__wrapp flex flex-col items-center text-sm w-full"
     :style="{ 'padding-bottom': isMobileHome ? '200px' : '300px' }">
     <LogoLanding class="logo" :class="[!showLogo ? 'logo-start' : '']" />
-    <div class="content__wrapp text-gray-800 w-full md:max-w-2xl lg:max-w-3xl md:h-full md:flex md:flex-col"
+    <div
+      class="content__wrapp text-gray-800 w-full md:max-w-2xl lg:max-w-3xl md:h-full md:flex md:flex-col"
       :class="[showContent ? 'show-content' : '']">
       <div class="description">
         <span>
@@ -53,13 +55,16 @@ onMounted(() => {
           interaction.
         </span>
       </div>
-      <div v-if="route.name === 'chat-welcome' && !chatStore.isLoading" class="messages__container justify-between"
+      <div
+        v-if="route.name === 'chat-welcome' && !chatStore.isLoading"
+        class="messages__container justify-between"
         :class="[isMobile ? 'flex-column' : 'flex']">
         <MessageButton @input-message="inputMessage" :text="'What are the names of the columns in my data?'" />
         <MessageButton @input-message="inputMessage" :text="'Compute the mean of all numeric columns'" />
         <MessageButton @input-message="inputMessage" :text="'Compute the standard deviation of all columns'" />
       </div>
-      <div v-if="route.name === 'home' && !chatStore.isLoading"
+      <div
+        v-if="route.name === 'home' && !chatStore.isLoading"
         class="uploads__container flex flex-col lg:flex lg:flex-row">
         <ChatFileUpload class="my-3" :class="[isMobile ? 'mx-0' : 'mx-5']" />
         <ChatFileSelect class="my-3" :class="[isMobile ? 'mx-0' : 'mx-5']" @click="isModalOpen = true" />

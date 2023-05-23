@@ -3,16 +3,7 @@ import logging
 from alembic import command, config
 from sqlalchemy import text
 
-from data_copilot.backend.crud.users import (
-    crud_add_user_to_group,
-    crud_create_group,
-    crud_create_user,
-    crud_get_group_by_name,
-    crud_get_user_by_email,
-)
 from data_copilot.backend.database.psql import SessionLocal, engine
-from data_copilot.backend.schemas import authentication as authentication_schema
-
 logger = logging.getLogger(__name__)
 
 if __name__ == "__main__":
