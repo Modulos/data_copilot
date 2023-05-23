@@ -4,6 +4,7 @@ from alembic import command, config
 from sqlalchemy import text
 
 from data_copilot.backend.database.psql import SessionLocal, engine
+
 logger = logging.getLogger(__name__)
 
 if __name__ == "__main__":
