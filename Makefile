@@ -57,3 +57,6 @@ reset-db: build-backend
 
 setup:
 	python3 configure.py
+
+launch-db:
+	docker compose -f docker-compose-dev.yml --env-file .dev.env up database adminer

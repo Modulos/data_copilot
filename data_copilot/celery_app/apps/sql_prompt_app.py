@@ -1,3 +1,4 @@
+from data_copilot.db_models.base import Base
 import logging
 import uuid
 from typing import Tuple
@@ -13,9 +14,12 @@ from data_copilot.celery_app.executors import sql_executor
 from data_copilot.celery_app.prompt_interpreter.sql_interpreter import (
     generate_sql_query,
 )
+from data_copilot.celery_app.database.psql import engine
+
 
 CONFIG = Config()
 
+Base.metadata.create_all(bind=engine)
 execution_app = Celery("main", broker=CONFIG.REDIS_URL)
 
 
@@ -66,6 +70,7 @@ def save_result(
             f"An error occured while saving the final result in DB: {e} --"
             f"message_id: {message_id} --"
         )
+        raise e
 
 
 @execution_app.task(name="execute_prompt", soft_time_limit=30)

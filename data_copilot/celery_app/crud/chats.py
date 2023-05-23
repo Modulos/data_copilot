@@ -14,6 +14,16 @@ def crud_create_message(
     content: str,
     content_type: str,
 ):
+    # if type(chat_id) is str convert it to uuid
+    if type(chat_id) is str:
+        chat_id = uuid.UUID(chat_id)
+
+    if type(sender_id) is str:
+        sender_id = uuid.UUID(sender_id)
+
+    if type(artifact_version_id) is str:
+        artifact_version_id = uuid.UUID(artifact_version_id)
+
     db_message = chats_model.Message(
         chat_id=chat_id,
         sender_id=sender_id,

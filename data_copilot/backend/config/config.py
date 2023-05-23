@@ -21,11 +21,7 @@ class Config(BaseSettings):
     }
 
     if os.getenv("ENVIRONMENT") != "TEST":
-        POSTGRES_HOST: str = Field(..., env="POSTGRES_HOST")
-        POSTGRES_PORT: int = Field(..., env="POSTGRES_PORT")
-        POSTGRES_USER: str = Field(..., env="POSTGRES_USER")
-        POSTGRES_PASSWORD: str = Field(..., env="POSTGRES_PASSWORD")
-        POSTGRES_DB: str = Field(..., env="POSTGRES_DB")
+        DB_CONNECTION_STRING: str = Field(..., env="DB_CONNECTION_STRING")
         SECRET_KEY: str = Field(..., env="JWT_SECRET_KEY")
         AZURE_STORAGE_ACCOUNT_NAME: str = Field(..., env="AZURE_STORAGE_ACCOUNT_NAME")
         AZURE_STORAGE_ACCOUNT_KEY: str = Field(..., env="AZURE_STORAGE_ACCOUNT_KEY")
@@ -44,7 +40,4 @@ class Config(BaseSettings):
 
     @property
     def POSTGRES_CONNECTION(self):
-        return (
-            f"postgresql://{self.POSTGRES_USER}:{self.POSTGRES_PASSWORD}@"
-            f"{self.POSTGRES_HOST}:{self.POSTGRES_PORT}/{self.POSTGRES_DB}"
-        )
+        return self.DB_CONNECTION_STRING

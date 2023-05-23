@@ -29,7 +29,9 @@ def run(
 
     match file_type:
         case "csv":
-            dataset = pd.read_csv(sas_url, sep=None, encoding="utf-8-sig", dtype=object)
+            dataset = pd.read_csv(
+                sas_url, sep=None, encoding="utf-8-sig", dtype=object, engine="python"
+            )
         case "xls" | "xlsx":
             dataset = read_excel(sas_url, dtype={"dteday": str})
         case _:
@@ -63,6 +65,7 @@ def run(
 
     except Exception as e:
         logging.error(e)
+        raise e
 
     finally:
         engine.dispose()

@@ -18,7 +18,12 @@ if os.getenv("ENVIRONMENT") == "TEST":
 
 else:
     SQLALCHEMY_DATABASE_URL = CONFIG.POSTGRES_CONNECTION
-    engine = create_engine(SQLALCHEMY_DATABASE_URL, connect_args={"sslmode": "allow"})
+    if "postgresql://" in SQLALCHEMY_DATABASE_URL:
+        engine = create_engine(
+            SQLALCHEMY_DATABASE_URL, connect_args={"sslmode": "allow"}
+        )
+    else:
+        engine = create_engine(SQLALCHEMY_DATABASE_URL)
     SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 

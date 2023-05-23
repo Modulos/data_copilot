@@ -54,7 +54,7 @@ def generate_sql_query(prompt, columns):
             {"role": "system", "content": context},
             {"role": "system", "content": rule_2},
             {"role": "user", "content": "User Pormpt: " + prompt},
-            {"role": "system", "content": "---SQLITE Query---"},
+            {"role": "user", "content": "---BEGIN SQLITE Query---"},
         ]
 
         response = (
