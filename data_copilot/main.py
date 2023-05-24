@@ -19,7 +19,7 @@ def get_envs():
         .strip(),
         "BACKEND_HOST": "localhost:8000/api",
         "DB_CONNECTION_STRING": "sqlite:///data_copilot.db",
-        "REDIS_URL": "redis://localhost:6379/0",
+        "REDIS_URL": "redis://localhost:6378/0",
         "OPENAI_API_KEY": os.environ.get("OPENAI_API_KEY"),
         "STORAGE_BACKEND": "volume:///data",
         "ENVIRONMENT": "DEVELOPMENT",
@@ -70,7 +70,7 @@ def start_redis(log_level="INFO"):
         [
             "redis-server",
             "--port",
-            "6379",
+            "6378",
             "--appendonly",
             "yes",
             "--loglevel",
@@ -119,7 +119,7 @@ def start_frontend(log_level="INFO"):
     return frontend_process
 
 
-def check_free_ports(ports=[8000, 8080, 6379]):
+def check_free_ports(ports=[8000, 8080, 6378]):
     non_free_ports = []
     for port in ports:
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
