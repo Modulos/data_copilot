@@ -63,15 +63,15 @@ include = ["data_copilot"]
 # include data_copilot/frontend/dist/*
 [options.package_data]
 data_copilot = [
-  "frontend/dist/*",
-  "frontend/dist/*/*",
-  "frontend/dist/*/*/*",
-  "frontend/dist/*/*/*/*",
-  "frontend/dist/*/*/*/*/*",
-  "frontend/dist/*/*/*/*/*/*",
-  "frontend/dist/*/*/*/*/*/*/*",
-  "frontend/dist/*/*/*/*/*/*/*/*",
-  "frontend/dist/*/*/*/*/*/*/*/*/*",
+  "data_copilot/frontend/dist/*",
+  "data_copilot/frontend/dist/*/*",
+  "data_copilot/frontend/dist/*/*/*",
+  "data_copilot/frontend/dist/*/*/*/*",
+  "data_copilot/frontend/dist/*/*/*/*/*",
+  "data_copilot/frontend/dist/*/*/*/*/*/*",
+  "data_copilot/frontend/dist/*/*/*/*/*/*/*",
+  "data_copilot/frontend/dist/*/*/*/*/*/*/*/*",
+  "data_copilot/frontend/dist/*/*/*/*/*/*/*/*/*",
 ]
 
 [tool.setuptools_scm]
