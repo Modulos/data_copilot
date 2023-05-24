@@ -1,0 +1,2 @@
+include data_copilot/frontend/dist/*
+include data_copilot/frontend/dist/assets/*
