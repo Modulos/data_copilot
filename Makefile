@@ -82,7 +82,7 @@ reset-db: build-backend
 setup:
 	python3 configure.py
 
-dist: clean build-frontend-locally ## builds source and wheel package
+dist: clean #build-frontend-locally ## builds source and wheel package
 	python3 -m build
 	ls -l dist
 

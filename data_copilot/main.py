@@ -184,9 +184,16 @@ def kill_process(process):
         process = None
 
 
-@click.command()
+@click.group()
+def main():
+    pass
+
+
+@main.command(
+    help="Start the Data Copilot. This will start the backend, redis, worker and frontend."
+)
 @click.option("--log-level", default="WARNING")
-def main(log_level):
+def run(log_level):
     check_free_ports()
 
     load_dotenv(".env")
@@ -222,6 +229,26 @@ def main(log_level):
         kill_process(worker_process)
 
     exit(0)
+
+
+@main.command()
+@click.option("--yes", is_flag=True)
+def reset(yes):
+    if not yes:
+        click.confirm("Are you sure you want to reset the database?", abort=True)
+
+    # delete"appendonlydir, shared-fs, .env, data_copilot.db, dump.rdb
+    subprocess.run(
+        [
+            "rm",
+            "-rf",
+            "appendonlydir",
+            "shared-fs",
+            ".env",
+            "data_copilot.db",
+            "dump.rdb",
+        ]
+    )
 
 
 if __name__ == "__main__":
