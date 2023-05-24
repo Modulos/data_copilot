@@ -1,9 +1,15 @@
+import logging
 import os
-from dotenv import load_dotenv
+import socket
 import subprocess
 import threading
-import data_copilot
+
 import click
+from colorama import Fore, Style
+from dotenv import load_dotenv
+from flask import Flask, send_from_directory
+
+import data_copilot
 
 
 def get_envs():
@@ -14,7 +20,6 @@ def get_envs():
         "BACKEND_HOST": "localhost:8000/api",
         "DB_CONNECTION_STRING": "sqlite:///data_copilot.db",
         "REDIS_URL": "redis://localhost:6379/0",
-        # "REDIS_URL": f"filesystem://broker",
         "OPENAI_API_KEY": os.environ.get("OPENAI_API_KEY"),
         "STORAGE_BACKEND": "volume:///data",
         "ENVIRONMENT": "DEVELOPMENT",
@@ -28,7 +33,16 @@ def get_envs():
     return env
 
 
-def start_backend_server():
+def start_backend_server(log_level="INFO"):
+    if log_level.lower() not in (
+        "critical",
+        "error",
+        "warning",
+        "info",
+        "debug",
+        "trace",
+    ):
+        log_level = "info"
     backend_process = subprocess.Popen(
         [
             "uvicorn",
@@ -38,7 +52,7 @@ def start_backend_server():
             "--port",
             "8000",
             "--log-level",
-            "debug",
+            log_level.lower(),
         ],
         env=get_envs(),
         stdout=subprocess.PIPE,  # Capture stdout
@@ -48,9 +62,20 @@ def start_backend_server():
     return backend_process
 
 
-def start_redis():
+def start_redis(log_level="INFO"):
+    if log_level.lower() not in ("debug", "verbose", "notice", "warning"):
+        log_level = "warning"
+
     redis_process = subprocess.Popen(
-        ["redis-server", "--port", "6379", "--appendonly", "yes"],
+        [
+            "redis-server",
+            "--port",
+            "6379",
+            "--appendonly",
+            "yes",
+            "--loglevel",
+            log_level.lower(),
+        ],
         stdout=subprocess.PIPE,  # Capture stdout
         stderr=subprocess.STDOUT,  # Redirect stderr to stdout
         universal_newlines=True,  # Enable text mode for stdout)
@@ -58,35 +83,67 @@ def start_redis():
     return redis_process
 
 
-def start_frontend():
-    # path: data_copilot.frontend.dist
-    # serve with python -m http.server 8080
+def start_frontend(log_level="INFO"):
+    def _start_frontend():
+        # Set up a logger for this thread, with the specified log level
+        logger = logging.getLogger("Frontend")
+        logger.setLevel(log_level)
 
-    # cd data_copilot/frontend/dist
-    # python -m http.server 8080
-    path = os.path.join(data_copilot.__path__[0], "frontend", "dist")
-    frontend_process = subprocess.Popen(
-        [
-            "python",
-            "-m",
-            "http.server",
-            "8080",
-        ],
-        cwd=path,  # Set the working directory for the subprocess
-        stdout=subprocess.PIPE,  # Capture stdout
-        stderr=subprocess.STDOUT,  # Redirect stderr to stdout
-        universal_newlines=True,  # Enable text mode for stdout
-    )
+        handler = logging.StreamHandler()
+        handler.setLevel(log_level)
+        logger.addHandler(handler)
+
+        log = logging.getLogger("werkzeug")
+        log.setLevel(log_level)
+
+        path = os.path.join(data_copilot.__path__[0], "frontend", "dist")
+
+        app = Flask("Frontend", static_folder=path)
+
+        # Apply the logger to the app
+        app.logger.handlers = [handler]
+
+        @app.route("/assets/<path:path>")
+        def send_assets(path):
+            return send_from_directory(os.path.join(app.static_folder, "assets"), path)
+
+        @app.route("/", defaults={"path": ""})
+        @app.route("/<path:path>")
+        def catch_all(path):
+            return send_from_directory(app.static_folder, "index.html")
+
+        app.run(host="0.0.0.0", port=8080)
+
+    frontend_process = threading.Thread(target=_start_frontend, daemon=True)
+    frontend_process.start()
     return frontend_process
 
 
-def start_worker():
+def check_free_ports(ports=[8000, 8080, 6379]):
+    non_free_ports = []
+    for port in ports:
+        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
+            try:
+                # try to open and bind to the socket
+                sock.bind(("localhost", port))
+            except OSError:
+                non_free_ports.append(port)
+
+    if len(non_free_ports) > 0:
+        raise Exception(
+            f"Ports {non_free_ports} are not free. Please make sure that the ports are free. Run 'lsof -i :<port>' to see which process is using the port."
+        )
+
+
+def start_worker(log_level="INFO"):
     worker_process = subprocess.Popen(
         [
             "celery",
             "-A",
             "data_copilot.celery_app.worker.execution_app",
             "worker",
+            "--loglevel",
+            log_level,
         ],
         env=get_envs(),
         stdout=subprocess.PIPE,  # Capture stdout
@@ -96,13 +153,28 @@ def start_worker():
     return worker_process
 
 
-def capture_stdout(*processes):
+def capture_stdout(color, process_name, process):
     while True:
-        for process in processes:
-            line = process.stdout.readline()
-            if not line:
-                break
-            print(line.rstrip())  # Process the captured line as needed
+        line = process.stdout.readline()
+        if not line:
+            continue
+        print(f"{color}{process_name+':': <20} {Style.RESET_ALL}{line}", end="")
+
+
+def create_subprocess_logger(**processes):
+    COLORS = [Fore.RED, Fore.GREEN, Fore.YELLOW, Fore.BLUE, Fore.MAGENTA, Fore.CYAN]
+
+    threads = []
+    for i, process in enumerate(processes):
+        stdout_thread = threading.Thread(
+            target=capture_stdout,
+            kwargs=dict(
+                color=COLORS[i], process_name=process, process=processes[process]
+            ),
+            daemon=True,
+        )
+        stdout_thread.start()
+        threads.append(stdout_thread)
 
 
 def kill_process(process):
@@ -113,7 +185,10 @@ def kill_process(process):
 
 
 @click.command()
-def main():
+@click.option("--log-level", default="WARNING")
+def main(log_level):
+    check_free_ports()
+
     load_dotenv(".env")
     if os.environ.get("OPENAI_API_KEY") is None:
         key = click.prompt("OpenAI API Key?", type=str, default="")
@@ -124,22 +199,16 @@ def main():
 
     load_dotenv(".env")
 
-    worker_process = start_worker()
-    redis_process = start_redis()
-    backend_process = start_backend_server()
-    frontend_process = start_frontend()
+    worker_process = start_worker(log_level)
+    redis_process = start_redis(log_level)
+    backend_process = start_backend_server(log_level)
+    frontend_process = start_frontend(log_level)
 
-    stdout_thread = threading.Thread(
-        target=capture_stdout,
-        args=(
-            worker_process,
-            # backend_process,
-            # redis_process,
-            # frontend_process,
-        ),
-        daemon=True,
+    stdout_threads = create_subprocess_logger(
+        worker=worker_process,
+        redis=redis_process,
+        backend=backend_process,
     )
-    stdout_thread.start()
 
     try:
         # Keep the main thread alive
@@ -150,10 +219,9 @@ def main():
 
         kill_process(backend_process)
         kill_process(redis_process)
-        kill_process(frontend_process)
         kill_process(worker_process)
 
-    stdout_thread.join()
+    exit(0)
 
 
 if __name__ == "__main__":

@@ -23,6 +23,13 @@ else:
         engine = create_engine(
             SQLALCHEMY_DATABASE_URL, connect_args={"sslmode": "allow"}
         )
+    elif "sqlite://" in SQLALCHEMY_DATABASE_URL:
+        engine = create_engine(
+            SQLALCHEMY_DATABASE_URL,
+            connect_args={"check_same_thread": False},
+            pool_size=5,
+            max_overflow=10,
+        )
     else:
         engine = create_engine(SQLALCHEMY_DATABASE_URL)
 

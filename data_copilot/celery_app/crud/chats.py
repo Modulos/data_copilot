@@ -8,8 +8,6 @@ from data_copilot.db_models import chats as chats_model
 def crud_create_message(
     db: Session,
     chat_id: uuid.UUID,
-    sender_id: uuid.UUID,
-    system_generated: bool,
     artifact_version_id: uuid.UUID | None,
     content: str,
     content_type: str,
@@ -18,16 +16,12 @@ def crud_create_message(
     if type(chat_id) is str:
         chat_id = uuid.UUID(chat_id)
 
-    if type(sender_id) is str:
-        sender_id = uuid.UUID(sender_id)
-
     if type(artifact_version_id) is str:
         artifact_version_id = uuid.UUID(artifact_version_id)
 
     db_message = chats_model.Message(
         chat_id=chat_id,
-        sender_id=sender_id,
-        system_generated=system_generated,
+        system_generated=True,
         artifact_version_id=artifact_version_id,
         content=content,
         content_type=content_type,

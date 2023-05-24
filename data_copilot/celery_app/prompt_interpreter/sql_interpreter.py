@@ -86,6 +86,5 @@ def generate_sql_query(prompt, columns):
     else:
         response_type = "TEXT"
 
-    print(messages)
-
+    print(response)
     return (response_type, response)

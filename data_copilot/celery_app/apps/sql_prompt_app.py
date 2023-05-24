@@ -1,4 +1,3 @@
-from data_copilot.db_models.base import Base
 import logging
 import uuid
 from typing import Tuple
@@ -9,21 +8,28 @@ from celery.exceptions import SoftTimeLimitExceeded, TimeLimitExceeded
 
 from data_copilot.celery_app.config import Config
 from data_copilot.celery_app.crud.chats import crud_create_message
-from data_copilot.celery_app.database.psql import SessionLocal
+from data_copilot.celery_app.database.psql import SessionLocal, engine
 from data_copilot.celery_app.executors import sql_executor
 from data_copilot.celery_app.prompt_interpreter.sql_interpreter import (
     generate_sql_query,
 )
-from data_copilot.celery_app.database.psql import engine
+from data_copilot.db_models.base import Base
+
+Base.metadata.create_all(bind=engine)
 
 
 CONFIG = Config()
 
-Base.metadata.create_all(bind=engine)
 execution_app = Celery("main", broker=CONFIG.REDIS_URL)
 
 
-@execution_app.task(name="save_result", soft_time_limit=3)
+# retry 2 times in case of failure
+@execution_app.task(
+    name="save_result",
+    soft_time_limit=3,
+    autoretry_for=(MemoryError,),
+    retry_kwargs={"max_retries": 2, "countdown": 1},
+)
 def save_result(
     prompt_result: Tuple[str, str],
     chat_id: uuid.UUID,
@@ -50,12 +56,11 @@ def save_result(
         crud_create_message(
             db,
             chat_id,
-            None,
-            True,
             artifact_version_id,
             message_content,
             message_type,
         )
+        db.close()
         logging.debug(
             f"I save the final result into DB as a message: {message_content}"
         )
