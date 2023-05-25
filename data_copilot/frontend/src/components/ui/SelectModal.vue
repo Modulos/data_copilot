@@ -56,7 +56,7 @@ const deleteArtifact = async (id: string) => {
           v-for="dataset in artifactsStore.artifacts"
           :key="dataset.id"
           class="dataset flex justify-between items-center"
-          
+
         >
           <div
             class=" dataset__left flex grow mr-2 hover:opacity-60"
@@ -71,7 +71,7 @@ const deleteArtifact = async (id: string) => {
           </div>
           <div class="dataset__right flex">
             <div class="dataset__icons flex">
-              <DatasetDelete @click="deleteArtifact(dataset.id)"/>
+              <DatasetDelete @click="deleteArtifact(dataset.id)" />
             </div>
           </div>
         </div>

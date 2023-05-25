@@ -10,7 +10,6 @@ import NotFound from '@/pages/NotFound.vue';
 // eslint-disable-next-line import/no-cycle
 import { useAuthStore } from '../stores/auth';
 
-
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [

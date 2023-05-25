@@ -6,21 +6,12 @@ import { useAuthStore } from '@/stores/auth';
 import useBreakpoints from '@/hooks/useBreakpoints';
 import { useRouter } from 'vue-router';
 
-import Logo from '@/assets/icons/svg/logo-landing.svg?component';
-
 import InputField from '@/components/ui/InputField.vue';
 import MainButton from '@/components/ui/MainButton.vue';
+import Logo from '@/assets/icons/svg/logo-landing.svg?component';
 
 const { isMobile } = useBreakpoints();
 const router = useRouter();
-
-function onSubmit(values: any) {
-  const authStore = useAuthStore();
-  const { username, password } = values;
-  return authStore
-    .login(username, password)
-    .catch((error) => console.log(error));
-}
 
 const email = ref<string | null>(null);
 const faultyEmail = ref<boolean>(false);
@@ -126,13 +117,11 @@ watch(passwordRef, () => {
 
         <span class="hover:opacity-60 hover:cursor-pointer text-[#27FFC6]" @click="router.push('/signup')"> Sign up </span>
       </div>
-      <div v-if="!askPassword" class="w-full flex justify-center my-6">
-      </div>
+      <div v-if="!askPassword" class="w-full flex justify-center my-6" />
       <div
         v-if="!askPassword"
         class="w-full flex justify-center items-center flex-col md:flex-row"
-      >
-      </div>
+      />
     </div>
   </div>
 </template>

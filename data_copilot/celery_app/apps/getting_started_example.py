@@ -126,7 +126,7 @@ def translate_user_prompt(
         str:
     """
     try:
-        schema = artifact_config.get("files", [dict()])[0].get("file_schema", {})
+        artifact_config.get("files", [dict()])[0].get("file_schema", {})
 
         # put here your translation logic
         query = "dummy query"

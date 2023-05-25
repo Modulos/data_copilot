@@ -15,14 +15,6 @@ const { isMobile } = useBreakpoints();
 
 const router = useRouter();
 
-function onSubmit(values: any) {
-  const authStore = useAuthStore();
-  const { username, password } = values;
-  return authStore
-    .login(username, password)
-    .catch((error) => console.log(error));
-}
-
 const email = ref<string | null>(null);
 const faultyEmail = ref<boolean>(false);
 const faultySignUp = ref<boolean>(false);
@@ -49,11 +41,15 @@ const onContinueSubmit = () => {
     || firstName.value === null || lastName.value === null) {
     return;
   }
-  authStore.signup(firstName.value, lastName.value, password.value,
-    email.value).catch((error) => {
-      console.log(error);
-      faultySignUp.value = true;
-    });
+  authStore.signup(
+    firstName.value,
+    lastName.value,
+    password.value,
+    email.value,
+  ).catch((error) => {
+    console.log(error);
+    faultySignUp.value = true;
+  });
 };
 
 watch(passwordRef, () => {
@@ -63,7 +59,6 @@ watch(passwordRef, () => {
 });
 
 // function that routes to the signup page
-
 
 </script>
 
@@ -98,11 +93,15 @@ watch(passwordRef, () => {
       </div>
       <div class="w-full flex justify-center mt-10 md:mt-4">
         <div :class="[isMobile ? 'w-80' : 'w-72']">
-          <InputField ref="passwordRef" v-model="password" placeholder="Password" input-type="password"
+          <InputField
+            ref="passwordRef"
+            v-model="password"
+            placeholder="Password"
+            input-type="password"
             @keyup.enter="onContinueSubmit" />
         </div>
         <p v-if="faultySignUp" class="mt-2 text-xs text-red-300">
-            Looks like the SignUp failed please try again.
+          Looks like the SignUp failed please try again.
         </p>
       </div>
 

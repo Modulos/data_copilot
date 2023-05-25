@@ -98,9 +98,9 @@ const useChatsStore = defineStore({
             );
 
             this.artifactVersionId = artifactVersion.data[0].id;
-            } catch (error) {
-              this.artifactVersionId = null;
-              this.activeDatasetName = 'Dataset not found';
+          } catch (error) {
+            this.artifactVersionId = null;
+            this.activeDatasetName = 'Dataset not found';
           }
         }
       } else {
