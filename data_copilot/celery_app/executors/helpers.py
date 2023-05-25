@@ -176,9 +176,6 @@ class Message:
             }
 
 
-_custom_locations = {"volume": "shared-fs/"}
-
-
 def path_processor(func):
     """
     Decorator to process paths
@@ -190,9 +187,10 @@ def path_processor(func):
             raise ValueError("Path cannot be empty")
 
         if path.startswith("volume://"):
-            path = path.replace("volume://", _custom_locations["volume"]).replace(
-                "//", "/"
-            )
+            path = path.replace("volume://", "").replace("//", "/")
+
+        elif path.startswith("file://"):
+            path = path.replace("file://", "").replace("//", "/")
 
         return func(path, *args, **kwargs)
 

@@ -7,7 +7,7 @@ from sqlalchemy import create_engine, text
 from data_copilot.celery_app.executors import helpers
 
 
-@helpers.path_processor
+# @helpers.path_processor
 def run(
     sas_url: str,
     schema: Dict[str, Any],

@@ -31,7 +31,7 @@ def get_envs():
         "DB_CONNECTION_STRING": "sqlite:///data_copilot.db",
         "REDIS_URL": "redis://localhost:6378/0",
         "OPENAI_API_KEY": os.environ.get("OPENAI_API_KEY"),
-        "STORAGE_BACKEND": "volume:///data",
+        "STORAGE_BACKEND": "volume://shared-fs/data",
         "ENVIRONMENT": "DEVELOPMENT",
         "COMPUTE_BACKEND": os.environ.get("COMPUTE_BACKEND", STANDARD_BACKEND),
         "PATH": os.environ.get("PATH", ""),

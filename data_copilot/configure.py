@@ -51,7 +51,7 @@ def main():
             "BACKEND_HOST": backend_host,
             "JWT_SECRET_KEY": jwtsecretkey,
             "OPENAI_API_KEY": openaiapikey,
-            "STORAGE_BACKEND": "volume:///data",
+            "STORAGE_BACKEND": "volume://shared-fs/data",
             "DB_CONNECTION_STRING": "postgresql://postgres:postgres@localhost:5432/postgres",
             "REDIS_URL": "redis://redis-queue:6379/0",
             "COMPUTE_BACKEND": compute_backend,

@@ -10,7 +10,7 @@ def _get_client(func):
             from data_copilot.storage_handler.azure_client import AzureClient
 
             client = AzureClient(uri)
-        elif uri.startswith("volume://"):
+        elif uri.startswith("volume://") or uri.startswith("file://"):
             from data_copilot.storage_handler.localstorage_client import (
                 LocalStorageClient,
             )

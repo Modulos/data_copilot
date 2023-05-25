@@ -6,8 +6,6 @@ from typing import Generator
 
 from data_copilot.storage_handler.base import ClientABC
 
-custom_locations = {"volume": "shared-fs/"}
-
 
 def path_processor(func):
     """
@@ -20,9 +18,10 @@ def path_processor(func):
             raise ValueError("Path cannot be empty")
 
         if path.startswith("volume://"):
-            path = path.replace("volume://", custom_locations["volume"]).replace(
-                "//", "/"
-            )
+            path = path.replace("volume://", "").replace("//", "/")
+
+        elif path.startswith("file://"):
+            path = path.replace("file://", "").replace("//", "/")
 
         return func(self, path, *args, **kwargs)
 
