@@ -11,6 +11,16 @@ from flask import Flask, send_from_directory
 
 import data_copilot
 
+import enum
+
+
+class BACKENDS(enum.Enum):
+    SQL = "sql"
+    LANGCHAIN = "langchain"
+
+
+STANDARD_BACKEND = BACKENDS.LANGCHAIN
+
 
 def get_envs():
     env = {
@@ -23,7 +33,7 @@ def get_envs():
         "OPENAI_API_KEY": os.environ.get("OPENAI_API_KEY"),
         "STORAGE_BACKEND": "volume:///data",
         "ENVIRONMENT": "DEVELOPMENT",
-        "COMPUTE_BACKEND": "sql",
+        "COMPUTE_BACKEND": os.environ.get("COMPUTE_BACKEND", STANDARD_BACKEND),
         "PATH": os.environ.get("PATH", ""),
         "PYTHONPATH": os.environ.get("PYTHONPATH", ""),
         "AZURE_STORAGE_ACCOUNT_KEY": "",
@@ -192,11 +202,21 @@ def main():
 @main.command(
     help="Start the Data Copilot. This will start the backend, redis, worker and frontend."
 )
-@click.option("--log-level", default="WARNING")
-def run(log_level):
+@click.option(
+    "--log-level", default="WARNING", help="The log level to use. Defaults to WARNING."
+)
+@click.option(
+    "--backend",
+    default=STANDARD_BACKEND.value,
+    type=click.Choice([b.value for b in BACKENDS]),
+    help=f"The backend to use for computation. Defaults to {STANDARD_BACKEND.value}",
+)
+def run(log_level, backend):
     check_free_ports()
 
     load_dotenv(".env")
+
+    os.environ["COMPUTE_BACKEND"] = backend
     if os.environ.get("OPENAI_API_KEY") is None:
         key = click.prompt("OpenAI API Key?", type=str, default="")
 

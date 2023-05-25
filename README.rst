@@ -1,6 +1,6 @@
 
 
-.. image:: frontend/src/assets/icons/svg/logo-landing.svg
+.. image:: data_copilot/frontend/src/assets/icons/svg/logo-landing.svg
    :target: #
    :align: center
    :width: 100%
@@ -29,11 +29,43 @@ DataCopilot is a scalable, docker-based software solution designed to streamline
 
 
 
-Installation
-============
+Install from PyPI
+=================
 
-Requirements
-------------
+In the current implementation you also need to install redis first. 
+
+
+For Linux
+
+
+.. code-block:: bash
+
+  sudo apt install redis
+
+
+For Mac
+
+
+.. code-block:: bash
+
+  brew install redis
+
+
+First make sure to have python3.10 installed. Then run the following command in your terminal:
+
+
+.. code-block:: bash
+
+  mkdir data_copilot
+  cd data_copilot
+  python3.10 -m venv venv
+  source venv/bin/activate
+  pip install data-copilot
+  data-copilot run
+
+
+Installation (with Docker)
+==========================
 
 Before you can install DataCopilot, you need to make sure you have the following tools installed:
 
@@ -45,8 +77,7 @@ Each of these tools has its own installation guide. Follow the links to get inst
 
 Furthermore, you need to have an openai API key. You can get one by signing up for an account at `openai.com <https://beta.openai.com/signup>`_.
 
-Cloning and Setting Up
-----------------------
+**Cloning and Setting Up**
 
 
 Once you have Docker, Docker Compose, and Python3 installed, you can download and set up DataCopilot. Run the following commands in your terminal:
