@@ -7,10 +7,15 @@ def generate_sql_query(prompt, columns):
     columns = harmonize_column_names(columns)
     cols_text = ", ".join(["'" + col + "'" for col in columns])
 
-    rule_1 = "You are an assistant which helps a user to translate a business question he has about a dataset to a SQL query. You don't execute the query on the data yourself. You are only allowed to write SQL queries that are compatible with SQLite."
-
+    rule_1 = (
+        "You are an assistant which helps a user to translate a business "
+        "question he has about a dataset to a SQL query. You don't execute "
+        "the query on the data yourself. You are only allowed to write SQL "
+        "queries that are compatible with SQLite."
+    )
     prompt_1 = (
-        "Please answer if the following user question can be answered with an sql query and no additional text: "
+        "Please answer if the following user question can be "
+        "answered with an sql query and no additional text: "
         f"{prompt}\n"
         "The table is called: df \n"
         f"The column name of the data are: {cols_text}"
@@ -36,10 +41,16 @@ def generate_sql_query(prompt, columns):
     if response.lower() in ("y", "yes"):
         response_type = "SQL"
 
-        rule_2 = "You are an assistant which helps a user to translate a business question he has about a dataset to a SQL query. You don't execute the query on the data yourself. You are only allowed to write SQL queries that are compatible with SQLite."
-
+        rule_2 = (
+            "You are an assistant which helps a user to translate a "
+            "business question he has about a dataset to a SQL query. "
+            "You don't execute the query on the data yourself. You are "
+            "only allowed to write SQL queries that are compatible with "
+            "SQLite."
+        )
         prompt_2 = (
-            "Please answer the following user question with an sql query and no additional text: "
+            "Please answer the following user question with an sql query "
+            "and no additional text: "
             f"{prompt}\n"
             "The table is called: df \n"
             f"The column name of the data are: {cols_text}"
@@ -61,10 +72,16 @@ def generate_sql_query(prompt, columns):
 
     elif response.lower() in ("n", "no"):
         response_type = "TEXT"
-        rule_3 = "You are an assistant which helps a user to translate a business question he has about a dataset to a SQL query. You don't execute the query on the data yourself. You are only allowed to write SQL queries that are compatible with SQLite."
-
+        rule_3 = (
+            "You are an assistant which helps a user to translate a "
+            "business question he has about a dataset to a SQL query. "
+            "You don't execute the query on the data yourself. You are "
+            "only allowed to write SQL queries that are compatible with "
+            "SQLite."
+        )
         prompt_3 = (
-            "Please explain why it is not possible to translate the following question to sql: "
+            "Please explain why it is not possible to translate the "
+            "following question to sql: "
             f"{prompt}\n"
             "The table is called: df \n"
             f"The column name of the data are: {cols_text}"

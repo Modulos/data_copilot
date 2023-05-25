@@ -93,7 +93,7 @@ def users():
 @users.command()
 @click.argument("email")
 @click.argument("password")
-def create(email, password):
+def create(email, password):  # noqa E811
     """
     Create a new user
     """
@@ -138,7 +138,7 @@ def groups():
 @click.argument("name")
 @click.option("--admin", is_flag=True)
 @click.option("--description")
-def create(name, admin, description):
+def create(name, admin, description):  # noqa E811
     """
     Create a new group
     """
@@ -155,7 +155,7 @@ def create(name, admin, description):
 
 @groups.command()
 @click.argument("name")
-def delete(name):
+def delete(name):  # noqa E811
     """
     Delete a group
     """
@@ -231,7 +231,7 @@ def artifact_types():
 @artifact_types.command()
 @click.argument("name")
 @click.option("--description")
-def create(name, description):
+def create(name, description):  # noqa E811
     """
     Create a new artifact type
     """
@@ -248,7 +248,7 @@ def create(name, description):
 
 @artifact_types.command()
 @click.argument("name")
-def delete(name):
+def delete(name):  # noqa E811
     """
     Delete an artifact type
     """

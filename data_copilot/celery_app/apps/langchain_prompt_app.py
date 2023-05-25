@@ -12,10 +12,7 @@ from langchain.llms import OpenAI
 from data_copilot.celery_app.config import Config
 from data_copilot.celery_app.crud.chats import crud_create_message
 from data_copilot.celery_app.database.psql import SessionLocal, engine
-from data_copilot.celery_app.executors import helpers, sql_executor
-from data_copilot.celery_app.prompt_interpreter.sql_interpreter import (
-    generate_sql_query,
-)
+from data_copilot.celery_app.executors import helpers
 from data_copilot.db_models.base import Base
 
 Base.metadata.create_all(bind=engine)
@@ -123,7 +120,7 @@ def translate_user_prompt(
         str:
     """
     try:
-        schema = artifact_config.get("files", [dict()])[0].get("file_schema", {})
+        # schema = artifact_config.get("files", [dict()])[0].get("file_schema", {})
         file_type = artifact_config.get("files", [dict()])[0].get("file_type", "")
 
         dataset = read_data(sas_url, file_type)

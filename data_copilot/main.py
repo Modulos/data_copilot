@@ -141,7 +141,10 @@ def check_free_ports(ports=[8000, 8080, 6378]):
 
     if len(non_free_ports) > 0:
         raise Exception(
-            f"Ports {non_free_ports} are not free. Please make sure that the ports are free. Run 'lsof -i :<port>' to see which process is using the port."
+            f"Ports {non_free_ports} are not free. "
+            "Please make sure that the ports are free. "
+            "Run 'lsof -i :<port>' to see which process "
+            "is using the port."
         )
 
 
@@ -200,10 +203,16 @@ def main():
 
 
 @main.command(
-    help="Start the Data Copilot. This will start the backend, redis, worker and frontend."
+    help=(
+        "Start the Data Copilot. This will "
+        "start the backend, redis, worker and "
+        "frontend."
+    )
 )
 @click.option(
-    "--log-level", default="WARNING", help="The log level to use. Defaults to WARNING."
+    "--log-level",
+    default="WARNING",
+    help=("The log level to use. Defaults to WARNING."),
 )
 @click.option(
     "--backend",
@@ -229,9 +238,9 @@ def run(log_level, backend):
     worker_process = start_worker(log_level)
     redis_process = start_redis(log_level)
     backend_process = start_backend_server(log_level)
-    frontend_process = start_frontend(log_level)
+    start_frontend(log_level)
 
-    stdout_threads = create_subprocess_logger(
+    create_subprocess_logger(
         worker=worker_process,
         redis=redis_process,
         backend=backend_process,
