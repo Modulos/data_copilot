@@ -63,6 +63,8 @@ First make sure to have python3.10 installed. Then run the following command in 
   pip install data-copilot
   data-copilot run
 
+Now you can open DataCopilot in your browser: http://localhost:8080
+
 
 Installation (with Docker)
 ==========================
