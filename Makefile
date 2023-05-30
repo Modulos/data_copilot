@@ -80,7 +80,7 @@ reset-db: build-backend
 	docker compose -f docker-compose-dev.yml --env-file .dev.env --profile reset_db run --rm reset-db
 
 setup:
-	python3 configure.py
+	python3 data_copilot/configure.py
 
 dist: clean build-frontend-locally ## builds source and wheel package
 	python3 -m build

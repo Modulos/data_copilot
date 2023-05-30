@@ -24,9 +24,10 @@ def main():
 
         openaiapikey = click.prompt("OpenAI API Key?", type=str, default="")
 
-        backend_host = click.prompt(
-            "Backend Host", type=str, default="http://localhost/api"
-        )
+        # backend_host = click.prompt(
+        #     "Backend Host", type=str, default="http://localhost/api"
+        # )
+        backend_host = "http://localhost/api"
 
         # create random JWT secret key openssl rand -hex 32 no user input
         jwtsecretkey = (
@@ -34,7 +35,12 @@ def main():
         )
 
         backend = click.prompt(
-            "What Backend do you want to use for computation? \n[1] SQL\n[2] PandasAI",
+            (
+                "Which backend do you want to use? \n "
+                "[1] SQL \n "
+                "[2] Getting Started \n "
+                "[3] Langchain \n "
+            ),
             type=int,
             default=1,
         )
@@ -45,6 +51,9 @@ def main():
         elif backend == 2:
             compute_backend = "getting_started"
 
+        elif backend == 3:
+            compute_backend = "langchain"
+
         env_file = {
             "APP_NAME": name,
             "BACKEND_HOST": backend_host,
@@ -52,7 +61,7 @@ def main():
             "OPENAI_API_KEY": openaiapikey,
             "STORAGE_BACKEND": "volume://shared-fs/data",
             "DB_CONNECTION_STRING": (
-                "postgresql://postgres:postgres@localhost:5432/postgres"
+                "postgresql://postgres:postgres@postgres:5432/postgres"
             ),
             "REDIS_URL": "redis://redis-queue:6379/0",
             "COMPUTE_BACKEND": compute_backend,

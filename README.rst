@@ -1,5 +1,3 @@
-
-
 .. image:: data_copilot/frontend/src/assets/icons/svg/logo-landing.svg
    :target: #
    :align: center
@@ -24,9 +22,51 @@
 
 --------
 
-DataCopilot is a scalable, docker-based software solution designed to streamline data processing and analysis. It offers a comprehensive platform that integrates frontend, backend, execution, and scheduling functionalities. Users can conveniently upload files in various formats such as CSV and XLSX, and interactively ask questions about these files, effectively turning complex data into understandable insights. Notably, DataCopilot also serves as a robust framework for building your own prompt-based applications, enhancing user experience and interaction. Future updates are anticipated to expand its file support, further increasing its versatility and utility in data management.
+Data Copilot is a scalable, docker-based software solution designed to streamline data analysis. It offers a comprehensive platform that integrates frontend, backend and execution functionalities. Users can conveniently upload files in various formats such as CSV and XLSX, and interactively ask questions about these files, effectively turning complex data into understandable insights. Notably, Data Copilot also serves as a robust framework for building your own prompt-based applications, enhancing user experience and interaction. Future updates are anticipated to expand its file support, further increasing its versatility and utility in data management.
 
 
+Prerequisites
+=============
+
+Before you can install Data Copilot, you must have an OpenAI API key. You can get one by signing up for an account at `openai.com <https://beta.openai.com/signup>`_. Once you have an API key, you can proceed with the installation.
+
+
+Installation (with Docker)
+==========================
+
+Before you can install Data Copilot, you need to make sure you have the following tools installed:
+
+- `Docker <https://docs.docker.com/get-docker/>`_
+- `Docker Compose <https://docs.docker.com/compose/install/>`_
+- `Python3 <https://www.python.org/downloads/>`_
+
+Each of these tools has its own installation guide. Follow the links to get instructions for your specific operating system (Windows, Mac, or Linux).
+
+**Cloning and Setting Up**
+
+Once you have Docker, Docker Compose, and Python3 installed, you can download and set up Data Copilot. Run the following commands in your terminal:
+
+.. code-block:: bash
+
+    git clone https://github.com/modulos/data_copilot.git
+    cd data_copilot
+    make setup
+
+**Open Data Copilot in your browser: http://localhost:80**
+
+
+These commands will clone the Data Copilot repository and run the setup process.
+
+During the setup process, you will be prompted to enter your openai API key. You can also enter it manually by editing the ``.dev.env`` file in the root directory of the repository after the installation.
+
+Choose `sql` or `langchain` as the compute backend. This will allow you to use the full functionality of Data Copilot. The getting_started compute backend is a limited version which will help you to get started with implementing your own logic. 
+Checkout the `Build your own Copilot` section for more information.
+
+
+
+.. image:: assets/login_page.png
+   :align: center
+   :width: 100%
 
 
 Install from PyPI
@@ -63,59 +103,20 @@ First make sure to have python3.10 installed. Then run the following command in 
   pip install data-copilot
   data-copilot run
 
-Now you can open DataCopilot in your browser: http://localhost:8080
+**If you run data-copilot like this, you can open open Data Copilot in your browser under port 8080: http://localhost:8080**
 
-
-Installation (with Docker)
-==========================
-
-Before you can install DataCopilot, you need to make sure you have the following tools installed:
-
-- `Docker <https://docs.docker.com/get-docker/>`_
-- `Docker Compose <https://docs.docker.com/compose/install/>`_
-- `Python3 <https://www.python.org/downloads/>`_
-
-Each of these tools has its own installation guide. Follow the links to get instructions for your specific operating system (Windows, Mac, or Linux).
-
-Furthermore, you need to have an openai API key. You can get one by signing up for an account at `openai.com <https://beta.openai.com/signup>`_.
-
-**Cloning and Setting Up**
-
-
-Once you have Docker, Docker Compose, and Python3 installed, you can download and set up DataCopilot. Run the following commands in your terminal:
-
-.. code-block:: bash
-
-    git clone https://github.com/modulos/data_copilot.git
-    cd data_copilot
-    make setup
-
-These commands will clone the DataCopilot repository and run the setup process.
-
-During the setup process, you will be prompted to enter your openai API key. You can also enter it manually by editing the ``.dev.env`` file in the root directory of the repository after the installation.
-
-Choose `sql` as the compute backend. This will allow you to use the full functionality of DataCopilot. The getting_started compute backend is a limited version which will help you to get started with implementing your own logic. 
-Checkout the `Build your own Copilot` section for more information.
-
-
-Open DataCopilot in your browser: http://localhost
-
-
-.. image:: assets/login_page.png
-   :align: center
-   :width: 100%
 
 
 Maintaining and Updating
 ------------------------
 
-Running DataCopilot
+Running Data Copilot
 
 .. code-block:: bash
 
     make run
 
-Reset DataCopilot
+Reset Data Copilot
 
 .. code-block:: bash
 
@@ -131,7 +132,7 @@ Architecture
    :align: center
    :width: 100%
 
-The DataCopilot system is composed of several services, each running in its own Docker container. These services interact to provide a comprehensive data processing and management solution.
+The Data Copilot system is composed of several services, each running in its own Docker container. These services interact to provide a comprehensive data processing and management solution. The number in brackets indicates the exposed port for each service. The number after the colon indicates the internal port used by the service.
 
 - **Nginx:** This service acts as a reverse proxy for the backend and adminer services. It uses the `data-copilot-nginx` Docker image and listens on port 80.
 
@@ -158,9 +159,9 @@ Development
 Storage
 -------
 
-By default, DataCopilot uses local storage for data persistence. The data folder is named `shared-fs` and is created in your current working directory. This setup should be sufficient for most development tasks.
+By default, Data Copilot uses local storage for data persistence. The data folder is named `shared-fs` and is created in your current working directory. This setup should be sufficient for most development tasks.
 
-However, for more extensive data handling, DataCopilot supports Azure as a storage backend. This allows you to utilize Azure's scalable and secure storage solutions for your data.
+However, for more extensive data handling, Data Copilot supports Azure as a storage backend. This allows you to utilize Azure's scalable and secure storage solutions for your data.
 
 If you choose to use Azure as your storage backend, you will need to set the following environment variables in the `.dev.env` file:
 
@@ -176,7 +177,7 @@ Remember to replace `{storage_account}` with your Azure storage account name and
 Database
 --------
 
-DataCopilot uses PostgreSQL as its database. This provides a robust and scalable solution for data management. 
+Data Copilot uses PostgreSQL as its database. This provides a robust and scalable solution for data management. 
 
 The default environment variables for connecting to the PostgreSQL database are:
 
@@ -192,7 +193,7 @@ These default values should work out-of-the-box for most development setups. How
 Development and Hot Reloading
 -----------------------------
 
-DataCopilot supports hot reloading, which allows you to see the effects of your code changes in real time without needing to manually stop and restart the application. This feature significantly speeds up the development process and provides instant feedback, making it easier to build and iterate on your application.
+Data Copilot supports hot reloading, which allows you to see the effects of your code changes in real time without needing to manually stop and restart the application. This feature significantly speeds up the development process and provides instant feedback, making it easier to build and iterate on your application.
 
 To start the service with hot reloading enabled, run the following command:
 
@@ -200,14 +201,14 @@ To start the service with hot reloading enabled, run the following command:
 
     make run-dev
 
-This command will start the DataCopilot service in development mode. Now, whenever you make changes to your code, those changes will be immediately reflected in the running application.
+This command will start the Data Copilot service in development mode. Now, whenever you make changes to your code, those changes will be immediately reflected in the running application.
 
 
 Build your own Copilot
 ----------------------
 
 
-DataCopilot is not just a standalone application, but also a framework that you can use to build your own data processing and analysis tools. Here are the steps to get started:
+Data Copilot is not just a standalone application, but also a framework that you can use to build your own data processing and analysis tools. Here are the steps to get started:
 
 1. **Worker Logic:** The worker logic can be found in the `celery_app/apps` directory. You can modify the logic here to suit your specific needs.
 
@@ -219,9 +220,9 @@ DataCopilot is not just a standalone application, but also a framework that you 
 
 5. **File Type Interaction:** Once you've configured the backend to support the new file type, you'll need to implement the specific logic for interacting with that file type on the worker side.
 
-6. **Return Types:** Currently, DataCopilot is configured to only return tables to the user. However, the framework supports other return types such as heatmaps, histograms, and barplots. You can see the implementation details for these types in the `getting_started_executor.py` file.
+6. **Return Types:** Currently, Data Copilot is configured to only return tables to the user. However, the framework supports other return types such as heatmaps, histograms, and barplots. You can see the implementation details for these types in the `getting_started_executor.py` file.
 
-With these steps, you can customize DataCopilot to handle your specific data processing and analysis tasks. Remember to thoroughly test your changes to ensure they work as expected.
+With these steps, you can customize Data Copilot to handle your specific data processing and analysis tasks. Remember to thoroughly test your changes to ensure they work as expected.
 
 
 Data Copilot Trademark
