@@ -63,7 +63,7 @@ def main():
             "DB_CONNECTION_STRING": (
                 "postgresql://postgres:postgres@database:5432/postgres"
             ),
-            "REDIS_URL": "redis://redis-queue:6379/0",
+            "REDIS_URL": "redis://redis-queue:6378/0",
             "COMPUTE_BACKEND": compute_backend,
         }
 
