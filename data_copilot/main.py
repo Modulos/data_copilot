@@ -222,7 +222,7 @@ def main():
     help=f"The backend to use for computation. Defaults to {STANDARD_BACKEND.value}",
 )
 def run(log_level, backend):
-    check_free_ports()
+    # check_free_ports()
 
     load_dotenv(".env")
 

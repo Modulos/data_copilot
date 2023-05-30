@@ -64,9 +64,6 @@ const deleteArtifact = async (id: string) => {
             <DatasetIcon />
             <div class="dataset__info flex flex-col">
               <h3 class="dataset__name">{{ dataset.name }}</h3>
-              <span class="dataset__time">{{
-                getFormattedTimeDifference(dataset.created_at)
-              }}</span>
             </div>
           </div>
           <div class="dataset__right flex">

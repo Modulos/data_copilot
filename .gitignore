@@ -183,3 +183,4 @@ shared-fs
 appendonlydir/
 dump.rdb
 data_copilot.db
+appendonly.aof
