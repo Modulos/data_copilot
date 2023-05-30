@@ -221,13 +221,9 @@ Data Copilot uses PostgreSQL as its database. This provides a robust and scalabl
 
 The default environment variables for connecting to the PostgreSQL database are:
 
-- `POSTGRES_DB`: The name of your PostgreSQL database. The default value is `postgres`.
-- `POSTGRES_HOST`: The hostname of your PostgreSQL server. The default value is `database`.
-- `POSTGRES_PASSWORD`: The password for your PostgreSQL user. The default value is `postgres`.
-- `POSTGRES_PORT`: The port on which your PostgreSQL server is running. The default value is `5432`.
-- `POSTGRES_USER`: The username for accessing your PostgreSQL database. The default value is `postgres`.
+- `DB_CONNECTION_STRING`: The connection string for the PostgreSQL database. The default value is `postgresql://postgres:postgres@database:5432/postgres`.
 
-These default values should work out-of-the-box for most development setups. However, you can change them as needed to match your specific database configuration.
+For the PyPi version of Data Copilot, the default value is `sqlite:///data_copilot.db`.
 
 
 Development and Hot Reloading
@@ -264,6 +260,24 @@ Data Copilot is not just a standalone application, but also a framework that you
 
 With these steps, you can customize Data Copilot to handle your specific data processing and analysis tasks. Remember to thoroughly test your changes to ensure they work as expected.
 
+
+Build Python Package
+--------------------
+
+To build the python package, first build the frontend with the following command once to install the npm dependencies:
+
+.. code-block:: bash
+
+    cd data_copilot/frontend
+    npm install
+    cd ../../
+
+
+Then run the following command to build the python package:
+
+.. code-block:: bash
+
+    make dist
 
 Data Copilot Trademark
 ======================

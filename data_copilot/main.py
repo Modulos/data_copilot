@@ -140,7 +140,8 @@ def check_free_ports(ports=[8000, 8080, 6378]):
                 non_free_ports.append(port)
 
     if len(non_free_ports) > 0:
-        raise Exception(
+        logging.warn(
+            f"{Fore.YELLOW}"
             f"Ports {non_free_ports} are not free. "
             "Please make sure that the ports are free. "
             "Run 'lsof -i :<port>' to see which process "
