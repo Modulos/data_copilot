@@ -91,6 +91,7 @@ install: clean ## install the package to the active Python's site-packages
 
 install-dev: clean ## install the package to the active Python's site-packages
 	pip install -e .[dev]
+	
 test-backend:
 	pip install .
 	pip install -r dockerfiles/backend/requirements.txt
