@@ -95,7 +95,7 @@ watch(passwordRef, () => {
       </div>
       <div class="w-full flex justify-center mt-10 md:mt-4">
         <div class="flex flex-col" :class="[isMobile ? 'w-80' : 'w-72']">
-          <div >
+          <div>
             <InputField
               ref="passwordRef"
               v-model="password"
