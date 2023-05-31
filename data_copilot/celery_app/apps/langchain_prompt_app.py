@@ -3,11 +3,11 @@ import uuid
 from typing import Tuple
 
 import openai
-import pandas as pd
 from celery import Celery, chain
 from celery.exceptions import SoftTimeLimitExceeded, TimeLimitExceeded
 from langchain.agents import create_pandas_dataframe_agent
 from langchain.llms import OpenAI
+from openai import error
 
 from data_copilot.celery_app.config import Config
 from data_copilot.celery_app.crud.chats import crud_create_message
@@ -20,26 +20,7 @@ Base.metadata.create_all(bind=engine)
 
 CONFIG = Config()
 
-execution_app = Celery("main", broker=CONFIG.REDIS_URL)
-
-
-@helpers.path_processor
-def read_data(sas_url, file_type):
-    match file_type:
-        case "csv":
-            dataset = pd.read_csv(
-                sas_url,
-                sep=None,
-                encoding="utf-8-sig",
-                dtype=object,
-                engine="python",
-            )
-        case "xls" | "xlsx":
-            dataset = pd.read_excel(sas_url, dtype={"dteday": str})
-        case _:
-            raise Exception(f"Unsupported '{file_type}' file type")
-
-    return dataset
+execution_app = Celery("main", broker=CONFIG.CELERY_BROKER_URL)
 
 
 # retry 2 times in case of failure
@@ -60,8 +41,7 @@ def save_result(
     """Save the final result as message in the DB.
 
     Args:
-        message_content (dict): _description_
-        message_type (str): _description_
+        prompt_result (Tuple[str, str]): _description_
         chat_id (uuid.UUID): _description_
         artifact_version_id (uuid.UUID | None, optional): _description_.
         Defaults to None.
@@ -70,7 +50,7 @@ def save_result(
         message_id (uuid.UUID | None, optional): _description_. Defaults to None.
     """
     try:
-        message_content, message_type = prompt_result
+        message_type, message_content = prompt_result
         db = SessionLocal()
         crud_create_message(
             db,
@@ -80,9 +60,6 @@ def save_result(
             message_type,
         )
         db.close()
-        logging.debug(
-            f"I save the final result into DB as a message: {message_content}"
-        )
     except SoftTimeLimitExceeded:
         logging.error(
             "The task save_result exceeded the time limit --"
@@ -108,7 +85,7 @@ def translate_user_prompt(
     message_id: uuid.UUID,
     artifact_config: dict | None = None,
     sas_url: str | None = None,
-) -> str:
+) -> Tuple[str, str]:
     """Translate user prompt into method to be called
 
     Args:
@@ -117,13 +94,13 @@ def translate_user_prompt(
         artifact_config (dict):
 
     Returns:
-        str:
+        Tuple[str, str]: Tuple of message type and message content.
     """
     try:
         # schema = artifact_config.get("files", [dict()])[0].get("file_schema", {})
         file_type = artifact_config.get("files", [dict()])[0].get("file_type", "")
 
-        dataset = read_data(sas_url, file_type)
+        dataset = helpers.read_dataset(sas_url, file_type)
 
         if len(dataset.index) == 0:
             raise Exception(f"Wrong '{sas_url}' content")
@@ -137,7 +114,7 @@ def translate_user_prompt(
         message.add_text(f"{answer}")
         result = message.to_dict()
         print(result)
-        return result["text_content"], result["message_type"]
+        return result["message_type"], result["text_content"]
 
     except SoftTimeLimitExceeded:
         logging.error(
@@ -147,13 +124,34 @@ def translate_user_prompt(
         )
         raise TimeLimitExceeded()
 
+    except error.RateLimitError:
+        logging.error(
+            "The translation of the user prompt failed due to rate limit error --"
+            f"Prompt: {user_prompt} --"
+            f"message_id: {message_id}"
+        )
+        return "error", "Rate limit error from OpenAI API. Please try again later"
+
+    except error.AuthenticationError:
+        logging.error(
+            "The translation of the user prompt failed due to authentication error --"
+            f"Prompt: {user_prompt} --"
+            f"message_id: {message_id}"
+        )
+        return "error", "OpenAI API key is invalid"
+
     except Exception as e:
         logging.error(
             f"An error occured while translating the user prompt: {e} --"
             f"Prompt: {user_prompt} --"
             f"message_id: {message_id}"
         )
-        raise e
+
+        logging.exception(e)
+        return (
+            "error",
+            "An error occured while executing. Please have a look at the logs.",
+        )
 
 
 @execution_app.task(name="execute_user_message")

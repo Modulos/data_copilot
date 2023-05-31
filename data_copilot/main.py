@@ -29,7 +29,7 @@ def get_envs():
         .strip(),
         "BACKEND_HOST": "localhost:8000/api",
         "DB_CONNECTION_STRING": "sqlite:///data_copilot.db",
-        "REDIS_URL": "redis://localhost:6378/0",
+        "CELERY_BROKER_URL": "redis://localhost:6378/0",
         "OPENAI_API_KEY": os.environ.get("OPENAI_API_KEY"),
         "STORAGE_BACKEND": "volume://shared-fs/data",
         "ENVIRONMENT": "DEVELOPMENT",

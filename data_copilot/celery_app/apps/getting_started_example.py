@@ -13,7 +13,7 @@ from data_copilot.celery_app.executors import getting_started_executor
 
 CONFIG = Config()
 
-execution_app = Celery("main", broker=CONFIG.REDIS_URL)
+execution_app = Celery("main", broker=CONFIG.CELERY_BROKER_URL)
 
 
 @execution_app.task(name="save_result", soft_time_limit=3)

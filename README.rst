@@ -110,19 +110,9 @@ First make sure to have python3.10 installed. Then run the following command in 
 Maintaining and Updating
 ------------------------
 
-Running Data Copilot
+Running Data Copilot in the Docker setup can be done by either running `make run` or `make run-dev` in the dev setup hot-reloading is activated for your code. 
 
-.. code-block:: bash
-
-    make run
-
-Reset Data Copilot
-
-.. code-block:: bash
-
-    make reset-db
-
-
+To reset the databse you can run `make reset-db` in the root directory of the repository. This will drop all tables and create them again.
 
 
 Architecture
@@ -280,6 +270,11 @@ Contributors
      -  
      -  
      -  
+   * -
+     - `Severin Husmann <https://github.com/serced>`_
+     -
+     -
+     -
    * - 
      - `Andrei Vaduva <https://github.com/andreiv-dev>`_
      - 
