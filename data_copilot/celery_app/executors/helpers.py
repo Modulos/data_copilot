@@ -2,6 +2,7 @@ from enum import Enum
 from functools import wraps
 from typing import Any, Dict
 
+import pandas as pd
 import simplejson
 
 
@@ -195,3 +196,22 @@ def path_processor(func):
         return func(path, *args, **kwargs)
 
     return wrapper
+
+
+@path_processor
+def read_dataset(sas_url, file_type):
+    match file_type:
+        case "csv":
+            dataset = pd.read_csv(
+                sas_url,
+                sep=None,
+                encoding="utf-8-sig",
+                dtype=object,
+                engine="python",
+            )
+        case "xls" | "xlsx":
+            dataset = pd.read_excel(sas_url, dtype={"dteday": str})
+        case _:
+            raise Exception(f"Unsupported '{file_type}' file type")
+
+    return dataset

@@ -29,14 +29,14 @@ class Config(BaseSettings):
         STORAGE_BACKEND: str = Field(..., env="STORAGE_BACKEND")
         BACKEND_HOST: str = Field(..., env="BACKEND_HOST")
 
-        REDIS_URL: str = Field(..., env="REDIS_URL")
+        CELERY_BROKER_URL: str = Field(..., env="CELERY_BROKER_URL")
 
     elif os.getenv("ENVIRONMENT") == "TEST":
         secret_key = "c86d3444a380bb36cca7abe1b6dcc8caaee0ecf5bbe254c5473783d147ebc12e"
         SECRET_KEY: str = secret_key
         BACKEND_HOST: str = "http://localhost:8000/api"
         STORAGE_BACKEND: str = "./artifacts/"
-        REDIS_URL: str = ""
+        CELERY_BROKER_URL: str = ""
 
     @property
     def POSTGRES_CONNECTION(self):

@@ -5,6 +5,7 @@ from typing import Tuple
 import openai
 from celery import Celery, chain
 from celery.exceptions import SoftTimeLimitExceeded, TimeLimitExceeded
+from openai import error
 
 from data_copilot.celery_app.config import Config
 from data_copilot.celery_app.crud.chats import crud_create_message
@@ -20,7 +21,7 @@ Base.metadata.create_all(bind=engine)
 
 CONFIG = Config()
 
-execution_app = Celery("main", broker=CONFIG.REDIS_URL)
+execution_app = Celery("main", broker=CONFIG.CELERY_BROKER_URL)
 
 
 # retry 2 times in case of failure
@@ -51,7 +52,7 @@ def save_result(
         message_id (uuid.UUID | None, optional): _description_. Defaults to None.
     """
     try:
-        message_content, message_type = prompt_result
+        message_type, message_content = prompt_result
         db = SessionLocal()
         crud_create_message(
             db,
@@ -61,9 +62,6 @@ def save_result(
             message_type,
         )
         db.close()
-        logging.debug(
-            f"I save the final result into DB as a message: {message_content}"
-        )
     except SoftTimeLimitExceeded:
         logging.error(
             "The task save_result exceeded the time limit --"
@@ -80,7 +78,7 @@ def save_result(
 
 @execution_app.task(name="execute_prompt", soft_time_limit=30)
 def execute_prompt(
-    query: str,
+    query: Tuple[str, str],
     sas_url: str | None = None,
     artifact_config: dict | None = None,
     message_id: uuid.UUID | None = None,
@@ -96,25 +94,32 @@ def execute_prompt(
     Returns:
         Tuple[str, str]: The result of the execution and the type of the result.
     """
+    query_type, query_content = query
+
+    if query_type == "error":
+        return query
     try:
         schema = artifact_config.get("files", [dict()])[0].get("file_schema", {})
         file_type = artifact_config.get("files", [dict()])[0].get("file_type", "")
 
-        message = sql_executor.run(sas_url, schema, file_type, query, schema.keys())
+        message = sql_executor.run(
+            sas_url, schema, file_type, query_content, schema.keys()
+        )
 
-        return message["text_content"], message["message_type"]
+        return message["message_type"], message["text_content"]
     except SoftTimeLimitExceeded:
         logging.error(
             "The execution of the prompt timed out --" f"message_id: {message_id} --"
         )
-        return "The execution of the prompt timed out", "error"
+        return "error", "The execution of the prompt timed out"
 
     except Exception as e:
         logging.error(
             f"An error occurred while executing method: {e} -- "
             f"message_id: {message_id}"
         )
-        return "An error occurred while executing method", "error"
+        logging.exception(e)
+        return "error", "An error occurred while executing method"
 
 
 @execution_app.task(
@@ -139,7 +144,7 @@ def translate_user_prompt(
     try:
         schema = artifact_config.get("files", [dict()])[0].get("file_schema", {})
         query = generate_sql_query(user_prompt, schema.keys())
-        return query
+        return "query", query
 
     except SoftTimeLimitExceeded:
         logging.error(
@@ -149,12 +154,17 @@ def translate_user_prompt(
         )
         raise TimeLimitExceeded()
 
+    except error.AuthenticationError:
+        return "error", "OpenAI API key is invalid"
+
     except Exception as e:
         logging.error(
             f"An error occured while translating the user prompt: {e} --"
             f"Prompt: {user_prompt} --"
             f"message_id: {message_id}"
         )
+        logging.exception(e)
+        return "error", "An error occured while translating the user prompt"
 
 
 @execution_app.task(name="execute_user_message")

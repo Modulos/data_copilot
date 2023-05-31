@@ -50,7 +50,7 @@ services:
       BACKEND_HOST: ${BACKEND_HOST}
       JWT_SECRET_KEY: ${JWT_SECRET_KEY}
       DB_CONNECTION_STRING: ${DB_CONNECTION_STRING}
-      REDIS_URL: ${REDIS_URL}
+      CELERY_BROKER_URL: ${CELERY_BROKER_URL}
       OPENAI_API_KEY: ${OPENAI_API_KEY}
       STORAGE_BACKEND: ${STORAGE_BACKEND}
       ENVIRONMENT: DEVELOPMENT
@@ -94,7 +94,7 @@ services:
     &worker
     image: data-copilot-celery-worker
     environment:
-      - REDIS_URL=${REDIS_URL}
+      - CELERY_BROKER_URL=${CELERY_BROKER_URL}
       - OPENAI_API_KEY=${OPENAI_API_KEY}
       - DB_CONNECTION_STRING=${DB_CONNECTION_STRING}
       - TOKENIZERS_PARALLELISM=false
@@ -110,7 +110,7 @@ services:
   flower:
     image: data-copilot-celery-flower
     environment:
-      - BROKER_URL=${REDIS_URL}
+      - BROKER_URL=${CELERY_BROKER_URL}
 
     ports:
       - 5555:5555
