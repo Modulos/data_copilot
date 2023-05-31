@@ -11,7 +11,7 @@ const route = useRoute();
 const auth = useAuthStore();
 const { isMobile } = useBreakpoints();
 
-const isLogin = computed(() => route.name === 'login' || route.name === 'not-found' || route.name === 'service-down');
+const isLogin = computed(() => route.name === 'login' || route.name === 'not-found' || route.name === 'service-down' || route.name === 'signup');
 const isError = computed(() => route.name === 'not-found' || route.name === 'service-down');
 
 const showFooter = route.name === 'home' && auth.activateAnimation ? ref(false) : ref(true);
@@ -23,7 +23,7 @@ onMounted(() => {
 });
 </script>
 <template>
-  <div v-if="showFooter" class="footer__wrapp flex justify-center text-white text-xs" :class="[route.name !== 'chat/:id' && route.name !== 'login' ? 'spec-position' : '']">
+  <div v-if="showFooter" class="footer__wrapp flex justify-center text-white text-xs" :class="[route.name !== 'chat/:id' ? 'spec-position' : '']">
     <div>
       <div v-if="isLogin" class="flex items-center justify-center mb-4">
         <IconModulos />

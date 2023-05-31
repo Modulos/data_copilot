@@ -22,6 +22,7 @@ const password = ref<string | null>(null);
 const firstName = ref<string | null>(null);
 const lastName = ref<string | null>(null);
 const passwordRef = ref<(typeof InputField) | null>(null);
+const faultyDetail = ref<string | null>(null);
 
 const onContinueSubmit = () => {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -49,6 +50,7 @@ const onContinueSubmit = () => {
   ).catch((error) => {
     console.log(error);
     faultySignUp.value = true;
+    faultyDetail.value = error.response.data.detail;
   });
 };
 
@@ -92,17 +94,19 @@ watch(passwordRef, () => {
         </div>
       </div>
       <div class="w-full flex justify-center mt-10 md:mt-4">
-        <div :class="[isMobile ? 'w-80' : 'w-72']">
-          <InputField
-            ref="passwordRef"
-            v-model="password"
-            placeholder="Password"
-            input-type="password"
-            @keyup.enter="onContinueSubmit" />
+        <div class="flex flex-col" :class="[isMobile ? 'w-80' : 'w-72']">
+          <div >
+            <InputField
+              ref="passwordRef"
+              v-model="password"
+              placeholder="Password"
+              input-type="password"
+              @keyup.enter="onContinueSubmit" />
+          </div>
+          <p v-if="faultySignUp" class="mt-2 text-xs text-red-300">
+            Looks like the SignUp failed please try again. {{ faultyDetail }}
+          </p>
         </div>
-        <p v-if="faultySignUp" class="mt-2 text-xs text-red-300">
-          Looks like the SignUp failed please try again.
-        </p>
       </div>
 
       <div class="w-full flex justify-center mt-4">

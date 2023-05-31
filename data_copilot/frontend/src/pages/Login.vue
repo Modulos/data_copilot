@@ -112,7 +112,7 @@ watch(passwordRef, () => {
           />
         </div>
       </div>
-      <div v-if="!askPassword" class="w-full flex justify-center mt-4">
+      <div class="w-full flex justify-center mt-4">
         <p class="opacity-50 text-white mr-1">Don't have an account?</p>
 
         <span class="hover:opacity-60 hover:cursor-pointer text-[#27FFC6]" @click="router.push('/signup')"> Sign up </span>
