@@ -47,7 +47,7 @@ build-frontend:
 	docker build -t $(IMAGE_NAME_FRONTEND) -f dockerfiles/frontend/Dockerfile data_copilot/frontend
 
 build-frontend-locally:
-	cd data_copilot/frontend && npm run build
+	cd data_copilot/frontend && npm install && npm run build
 
 build-nginx:
 	docker build -t $(IMAGE_NAME_NGINX) -f dockerfiles/nginx/Dockerfile .
@@ -91,6 +91,7 @@ install: clean ## install the package to the active Python's site-packages
 
 install-dev: clean ## install the package to the active Python's site-packages
 	pip install -e .[dev]
+
 test-backend:
 	pip install .
 	pip install -r dockerfiles/backend/requirements.txt

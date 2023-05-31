@@ -19,19 +19,19 @@ onClickOutside(modal, () => emit('closeModal'));
 function closeModal() {
   emit('closeModal');
 }
-function getFormattedTimeDifference(creationDate: string) {
-  const now = new Date();
-  const diffInMs = now.getTime() - new Date(creationDate).getTime();
-  const diffInMinutes = Math.round(diffInMs / 60000);
-  const diffInHours = Math.round(diffInMs / 3600000);
-  const diffInDays = Math.round(diffInMs / 86400000);
-  if (diffInMinutes < 60) {
-    return `${diffInMinutes} minutes ago`;
-  } if (diffInHours < 24) {
-    return `${diffInHours} hours ago`;
-  }
-  return `${diffInDays} days ago`;
-}
+// function getFormattedTimeDifference(creationDate: string) {
+//   const now = new Date();
+//   const diffInMs = now.getTime() - new Date(creationDate).getTime();
+//   const diffInMinutes = Math.round(diffInMs / 60000);
+//   const diffInHours = Math.round(diffInMs / 3600000);
+//   const diffInDays = Math.round(diffInMs / 86400000);
+//   if (diffInMinutes < 60) {
+//     return `${diffInMinutes} minutes ago`;
+//   } if (diffInHours < 24) {
+//     return `${diffInHours} hours ago`;
+//   }
+//   return `${diffInDays} days ago`;
+// }
 const openChat = async (id: string, name: string) => {
   emit('closeModal');
   await store.createChat(id, name);
