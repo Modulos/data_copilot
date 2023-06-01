@@ -1,0 +1,31 @@
+name: Feature request
+description: Suggest features, propose improvements, discuss new ideas.
+labels: [enhancement]
+body:
+  - type: markdown
+    attributes:
+      value: >
+        Before requesting please search [existing issues](https://github.com/Modulos/data_copilot/labels/enhancement).
+        Usage questions such as "How do I...?"  belong on the
+        [Discord](https://discord.gg/864J9K5d) and will be closed.
+
+  - type: checkboxes
+    attributes:
+      label: Impacted area
+      description: Please select an area of improvement.
+      options:
+        - Backend
+        - Frontend
+        - Database
+        - Dockerfile
+        - Others
+        - label: Others
+          required: false
+  - type: textarea
+    attributes:
+      label: "Feature description"
+      description: >
+        This could be new algorithms, data structures or improving any existing
+        implementations.
+    validations:
+      required: true
