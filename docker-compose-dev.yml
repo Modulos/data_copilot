@@ -59,6 +59,20 @@ services:
       AZURE_STORAGE_ACCOUNT_NAME: ${AZURE_STORAGE_ACCOUNT_NAME}
       CONTAINER_NAME: ${CONTAINER_NAME}
 
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "curl",
+          "--fail",
+          "http://localhost/api/health"
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+    restart: always
+
     depends_on:
       - database
     volumes:
@@ -100,6 +114,10 @@ services:
       - TOKENIZERS_PARALLELISM=false
       - ENVIRONMENT=DEVELOPMENT
       - COMPUTE_BACKEND=${COMPUTE_BACKEND}
+
+    depends_on:
+      backend:
+        condition: service_healthy
 
     volumes:
       - ./data_copilot/celery_app:/home/celery_user/app/data_copilot/celery_app

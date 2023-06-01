@@ -1,5 +1,8 @@
 FROM python:3.10-slim
 
+RUN apt update
+RUN apt install -y curl
+
 # Create a non-root user and switch to it
 RUN addgroup --gid 1000 fastapi_group && \
     adduser --uid 1000 --ingroup fastapi_group --home /home/fastapi_user --shell /bin/sh --disabled-password --gecos "" fastapi_user
