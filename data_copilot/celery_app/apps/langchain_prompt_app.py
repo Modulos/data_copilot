@@ -26,7 +26,7 @@ execution_app = Celery("main", broker=CONFIG.CELERY_BROKER_URL)
 # retry 2 times in case of failure
 @execution_app.task(
     name="save_result",
-    soft_time_limit=3,
+    soft_time_limit=10,
     autoretry_for=(MemoryError,),
     retry_kwargs={"max_retries": 2, "countdown": 1},
 )
