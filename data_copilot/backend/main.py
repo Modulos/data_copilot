@@ -6,6 +6,7 @@ from data_copilot.backend.database.psql import engine
 from data_copilot.backend.routers.admin.admin import admin_router as admin_router
 from data_copilot.backend.routers.artifacts import artifacts_router
 from data_copilot.backend.routers.chats import chats_router
+from data_copilot.backend.routers.health import health_router
 from data_copilot.backend.routers.token import token_router
 from data_copilot.backend.routers.users import users_router as users_router
 from data_copilot.db_models import *  # noqa F401 F403
@@ -60,6 +61,7 @@ app.add_middleware(
 )
 
 router = APIRouter(prefix="/api")
+router.include_router(health_router, tags=["users"])
 router.include_router(users_router, tags=["users"])
 router.include_router(admin_router, tags=["admin"])
 router.include_router(token_router, tags=["authenication"])
