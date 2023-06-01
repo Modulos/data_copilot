@@ -27,11 +27,11 @@ body:
     label: Impacted area
     description: Please select an area of improvement.
     options:
-      - Backend
-      - Frontend
-      - Database
-      - Dockerfile
-      - Others
+      - label: Backend
+      - label: Frontend
+      - label: Database
+      - label: Dockerfile
+      - label: Others
       - label: Others
         required: false
 - type: textarea
