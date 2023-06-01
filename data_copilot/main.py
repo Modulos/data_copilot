@@ -19,7 +19,7 @@ class BACKENDS(enum.Enum):
     LANGCHAIN = "langchain"
 
 
-STANDARD_BACKEND = BACKENDS.LANGCHAIN
+STANDARD_BACKEND = BACKENDS.SQL
 
 
 def get_envs():
