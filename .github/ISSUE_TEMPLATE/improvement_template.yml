@@ -19,7 +19,6 @@ body:
         - label: Database
         - label: Dockerfile
         - label: Others
-        - label: Others
           required: false
   - type: textarea
     attributes:
