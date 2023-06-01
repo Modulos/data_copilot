@@ -1,0 +1,132 @@
+version: "3.7"
+services:
+  nginx:
+    image: data-copilot-nginx
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+      - adminer
+
+    environment:
+      ENVIRONMENT: PRODUCTION
+
+  database:
+    image: postgres:latest
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_DB: postgres
+    volumes:
+      - type: volume
+        source: db-storage
+        target: /var/lib/postgresql/data
+    command: postgres -c listen_addresses=0.0.0.0
+
+  frontend:
+    image: data-copilot-frontend
+    ports:
+      - "8080:80"
+
+  backend:
+    &backend
+    image: data-copilot-backend
+    ports:
+      - "8000:80"
+    environment:
+      BACKEND_HOST: ${BACKEND_HOST}
+      JWT_SECRET_KEY: ${JWT_SECRET_KEY}
+      DB_CONNECTION_STRING: ${DB_CONNECTION_STRING}
+      CELERY_BROKER_URL: ${CELERY_BROKER_URL}
+      OPENAI_API_KEY: ${OPENAI_API_KEY}
+      STORAGE_BACKEND: ${STORAGE_BACKEND}
+      ENVIRONMENT: PRODUCTION
+      COMPUTE_BACKEND: ${COMPUTE_BACKEND}
+      AZURE_STORAGE_ACCOUNT_KEY: ${AZURE_STORAGE_ACCOUNT_KEY}
+      AZURE_STORAGE_ACCOUNT_NAME: ${AZURE_STORAGE_ACCOUNT_NAME}
+      CONTAINER_NAME: ${CONTAINER_NAME}
+
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "curl",
+          "--fail",
+          "http://localhost/api/health"
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+    restart: always
+
+    depends_on:
+      - database
+    volumes:
+      - shared-fs:/home/fastapi_user/app/shared-fs
+    user: "1000:1000"
+    command: uvicorn data_copilot.backend.main:app --host 0.0.0.0 --port 80 --log-level warning
+
+  adminer:
+    image: adminer
+    ports:
+      - "8010:8080"
+    depends_on:
+      - database
+
+  reset-db:
+    <<: *backend
+    command: python data_copilot/backend/setup/setup.py
+    ports:
+      - "8001:80"
+    profiles:
+      - reset_db
+
+  redis-queue:
+    image: redis:alpine
+    container_name: redis-queue
+    restart: always
+    ports:
+      - 6378:6378
+    command: redis-server --appendonly yes --port 6378
+
+  celery-worker:
+    &worker
+    image: data-copilot-celery-worker
+    environment:
+      - CELERY_BROKER_URL=${CELERY_BROKER_URL}
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - DB_CONNECTION_STRING=${DB_CONNECTION_STRING}
+      - TOKENIZERS_PARALLELISM=false
+      - ENVIRONMENT=DEVELOPMENT
+      - COMPUTE_BACKEND=${COMPUTE_BACKEND}
+
+    depends_on:
+      backend:
+        condition: service_healthy
+
+    volumes:
+      - shared-fs:/home/celery_user/app/shared-fs
+    user: "1000:1000"
+    command: celery -A data_copilot.celery_app.worker.execution_app worker
+
+  flower:
+    image: data-copilot-celery-flower
+    environment:
+      - BROKER_URL=${CELERY_BROKER_URL}
+
+    ports:
+      - 5555:5555
+    healthcheck:
+      test: [ "CMD", "curl", "--fail", "http://localhost:5555/" ]
+      interval: 10s
+      timeout: 10s
+      retries: 5
+    restart: always
+    command: celery flower
+
+volumes:
+  db-storage:
+  shared-fs:
