@@ -20,6 +20,9 @@
 .. image:: https://github.com/Modulos/data_copilot/actions/workflows/pr-test.yml/badge.svg?event=push
      :target: https://github.com/Modulos/data_copilot/actions/workflows/pr-test.yml
 
+.. image:: https://img.shields.io/discord/1110586557963972618?color=%237289DA&label=DataCopilot&logo=discord&logoColor=white
+   :target: https://discord.gg/864J9K5d
+
 --------
 
 Data Copilot is a scalable, docker-based software solution designed to streamline data analysis. It offers a comprehensive platform that integrates frontend, backend and execution functionalities. Users can conveniently upload files in various formats such as CSV and XLSX, and interactively ask questions about these files, effectively turning complex data into understandable insights. Notably, Data Copilot also serves as a robust framework for building your own prompt-based applications, enhancing user experience and interaction. Future updates are anticipated to expand its file support, further increasing its versatility and utility in data management.
