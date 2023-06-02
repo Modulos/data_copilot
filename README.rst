@@ -1,4 +1,4 @@
-.. image:: data_copilot/frontend/src/assets/icons/svg/logo-landing.svg
+.. image:: https://raw.githubusercontent.com/Modulos/data_copilot/main/data_copilot/frontend/src/assets/icons/svg/logo-landing.svg
    :target: #
    :align: center
    :width: 100%
@@ -76,7 +76,7 @@ Checkout the `Build your own Copilot` section for more information.
 
 
 
-.. image:: assets/login_page.png
+.. image:: https://raw.githubusercontent.com/Modulos/data_copilot/main/assets/login_page.png
    :align: center
    :width: 100%
 
@@ -129,7 +129,7 @@ To reset the databse you can run `make reset-db` in the root directory of the re
 🏛️ Architecture
 ===============
 
-.. image:: assets/architecture.svg
+.. image:: https://raw.githubusercontent.com/Modulos/data_copilot/main/assets/architecture.svg
    :align: center
    :width: 100%
 
