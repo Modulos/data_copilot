@@ -39,7 +39,8 @@ services:
       - ./data_copilot/frontend:/app
     command: npm run dev -- --port 80 --host
     depends_on:
-      - install-frontend-dependencies
+      install-frontend-dependencies:
+        condition: service_completed_successfully
 
   backend:
     &backend
