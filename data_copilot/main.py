@@ -10,16 +10,7 @@ from dotenv import load_dotenv
 from flask import Flask, send_from_directory
 
 import data_copilot
-
-import enum
-
-
-class BACKENDS(enum.Enum):
-    SQL = "sql"
-    LANGCHAIN = "langchain"
-
-
-STANDARD_BACKEND = BACKENDS.SQL
+from data_copilot.execution_apps import BACKENDS, STANDARD_BACKEND
 
 
 def get_envs():

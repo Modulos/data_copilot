@@ -1,5 +1,4 @@
 import asyncio
-import json
 import os
 import time
 
@@ -48,8 +47,6 @@ from data_copilot.backend.schemas.chats import (
 )
 from data_copilot.storage_handler.functions import (
     exists,
-    get_signed_download_url,
-    read_file,
 )
 
 CONFIG = Config()
@@ -293,7 +290,6 @@ async def post_chats_chatid_messages_messageid(
         message (Message): The message to be executed
 
     """
-    artifact_config = {}
     if message.artifact_version_id:
         artifact_version: ArtifactVersion = await get_artifact_version_dependency(
             message.artifact_version_id, db=db
@@ -310,33 +306,32 @@ async def post_chats_chatid_messages_messageid(
                 detail="The artifact version must contain a config.json file",
             )
 
-        artifact_config = json.load(
-            read_file(os.path.join(artifact_version.artifact_uri, "config.json"))
-        )
-        file_name = artifact_config.get("files", [dict()])[0].get("file_name", None)
-        if not exists(os.path.join(artifact_version.artifact_uri, file_name)):
-            raise HTTPException(
-                status_code=400,
-                detail=f"The artifact version must contain a file named {file_name}",
-            )
+        # artifact_config = json.load(
+        #     read_file(os.path.join(artifact_version.artifact_uri, "config.json"))
+        # )
+        # file_name = artifact_config.get("files", [dict()])[0].get("file_name", None)
+        # if not exists(os.path.join(artifact_version.artifact_uri, file_name)):
+        #     raise HTTPException(
+        #         status_code=400,
+        #         detail=f"The artifact version must contain a file named {file_name}",
+        #     )
 
-        sas_url = get_signed_download_url(
-            os.path.join(artifact_version.artifact_uri, file_name)
-        )
-        artifact_version_id = artifact_version.id
-    else:
-        sas_url = None
-        artifact_version_id = None
-
+        # sas_url = get_signed_download_url(
+        #     os.path.join(artifact_version.artifact_uri, file_name)
+        # )
+        # artifact_version_id = artifact_version.id
+    # else:
+    #     sas_url = None
+    #     artifact_version_id = None
+    artifact_version_uri = artifact_version.artifact_uri if artifact_version else None
     execution_app.send_task(
         "execute_user_message",
         args=(
             message.content,
             message.chat_id,
             message.id,
-            artifact_version_id,
-            sas_url,
-            artifact_config,
+            artifact_version.id,
+            artifact_version_uri,
         ),
     )
 

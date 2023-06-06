@@ -50,7 +50,7 @@ Once you have Docker, Docker Compose, and Python3 installed, you can download an
 
     git clone https://github.com/modulos/data_copilot.git
     cd data_copilot
-    pip install -r requirements_dev.txt
+    pip install ".[dev]"
     make setup
 
 **Open Data Copilot in your browser: http://localhost:80**

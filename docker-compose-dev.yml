@@ -77,6 +77,7 @@ services:
       - database
     volumes:
       - ./data_copilot/backend:/home/fastapi_user/app/data_copilot/backend
+      - ./data_copilot/execution_apps:/home/fastapi_user/app/data_copilot/execution_apps
       - shared-fs:/home/fastapi_user/app/shared-fs
     user: "1000:1000"
     command: uvicorn data_copilot.backend.main:app --host 0.0.0.0 --port 80 --reload --log-level debug
@@ -121,9 +122,11 @@ services:
 
     volumes:
       - ./data_copilot/celery_app:/home/celery_user/app/data_copilot/celery_app
+      - ./data_copilot/execution_apps:/home/celery_user/app/data_copilot/execution_apps
+      - ./data_copilot/storage_handler:/home/celery_user/app/data_copilot/storage_handler
       - shared-fs:/home/celery_user/app/shared-fs
     user: "1000:1000"
-    command: watchmedo auto-restart -d ./data_copilot/celery_app/ -p "*.py;*.cfg" --recursive -- celery -A data_copilot.celery_app.worker.execution_app worker --loglevel=info --concurrency=1
+    command: watchmedo auto-restart -d ./data_copilot/ -p "*.py;*.cfg" --recursive -- celery -A data_copilot.celery_app.worker.execution_app worker --loglevel=info --concurrency=1
 
   flower:
     image: data-copilot-celery-flower

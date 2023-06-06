@@ -1,9 +1,10 @@
 from enum import Enum
-from functools import wraps
 from typing import Any, Dict
 
 import pandas as pd
 import simplejson
+
+from data_copilot import storage_handler
 
 
 def harmonize_column_names(columns):
@@ -31,7 +32,9 @@ class ComponentTypes(str, Enum):
 
 
 class Component:
-    """Class to represent a json component."""
+    """
+    Class to represent a json component.
+    """
 
     def __init__(self, name: str, comp_type: ComponentTypes) -> None:
         """Initialize the json component.
@@ -146,7 +149,7 @@ class Message:
         Args:
             text (str): The text to add.
         """
-        if not self.message_type == MessageTypes.TEXT:
+        if self.message_type not in (MessageTypes.TEXT, MessageTypes.ERROR):
             raise ValueError("Cannot add text to a non-text message.")
         self.text_content += text
 
@@ -157,7 +160,7 @@ class Message:
         Returns:
             Dict[str, str]: The message content and type.
         """
-        if self.message_type == "text":
+        if self.message_type in (MessageTypes.TEXT, MessageTypes.ERROR):
             return {
                 "message_type": self.message_type.value,
                 "text_content": self.text_content,
@@ -177,40 +180,19 @@ class Message:
             }
 
 
-def path_processor(func):
-    """
-    Decorator to process paths
-    """
-
-    @wraps(func)
-    def wrapper(path, *args, **kwargs):
-        if not path:
-            raise ValueError("Path cannot be empty")
-
-        if path.startswith("volume://"):
-            path = path.replace("volume://", "").replace("//", "/")
-
-        elif path.startswith("file://"):
-            path = path.replace("file://", "").replace("//", "/")
-
-        return func(path, *args, **kwargs)
-
-    return wrapper
-
-
-@path_processor
-def read_dataset(sas_url, file_type):
+def read_dataset_io(uri, file_type):
+    file = storage_handler.read_file(uri)
     match file_type:
         case "csv":
             dataset = pd.read_csv(
-                sas_url,
+                file,
                 sep=None,
                 encoding="utf-8-sig",
                 dtype=object,
                 engine="python",
             )
         case "xls" | "xlsx":
-            dataset = pd.read_excel(sas_url, dtype={"dteday": str})
+            dataset = pd.read_excel(file, dtype={"dteday": str})
         case _:
             raise Exception(f"Unsupported '{file_type}' file type")
 

@@ -19,6 +19,7 @@ class Config(BaseSettings):
         "application/vnd.ms-excel": "xls",
         "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": "xlsx",
     }
+    COMPUTE_BACKEND: str = Field(..., env="COMPUTE_BACKEND")
 
     if os.getenv("ENVIRONMENT") != "TEST":
         DB_CONNECTION_STRING: str = Field(..., env="DB_CONNECTION_STRING")
