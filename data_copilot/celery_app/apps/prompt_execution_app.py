@@ -1,6 +1,6 @@
 import logging
 import uuid
-from typing import Tuple
+from typing import Tuple, List
 
 import openai
 from celery import Celery, chain
@@ -68,7 +68,7 @@ def save_result(
 
 
 @execution_app.task(
-    name="translating_user_prompt",
+    name="executing_user_prompt",
     soft_time_limit=60,
     autoretry_for=(TimeLimitExceeded, openai.error.RateLimitError),
     retry_kwargs={"max_retries": 3, "countdown": 30},
@@ -79,8 +79,9 @@ def execute_user_prompt(
     message_id: uuid.UUID,
     artifact_version_id: uuid.UUID,
     artifact_version_uri: str,
+    previous_messages: List[dict] = None,
 ) -> Tuple[str, str]:
-    """Translate user prompt into method to be called
+    """Execute user prompt into method to be called
 
     Args:
         user_prompt (str): User prompt to be translated.
@@ -102,6 +103,7 @@ def execute_user_prompt(
                 message_id=message_id,
                 artifact_version_id=artifact_version_id,
                 artifact_version_uri=artifact_version_uri,
+                previous_messages=previous_messages,
             )
             .to_dict()
         )
@@ -121,7 +123,7 @@ def execute_user_prompt(
             f"message_id: {message_id}"
         )
         logging.exception(e)
-        return "text", "An error occured while translating the user prompt."
+        return "error", "An error occured while executing the user prompt."
 
 
 @execution_app.task(name="execute_user_message")
@@ -131,6 +133,7 @@ def execute_user_message(
     message_id: uuid.UUID,
     artifact_version_id: uuid.UUID | None = None,
     artifact_version_uri: str | None = None,
+    previous_messages: List[dict] = None,
 ):
     chain(
         execute_user_prompt.s(
@@ -139,6 +142,7 @@ def execute_user_message(
             message_id=message_id,
             artifact_version_id=artifact_version_id,
             artifact_version_uri=artifact_version_uri,
+            previous_messages=previous_messages,
         ),
         save_result.s(
             chat_id=chat_id,

@@ -4,8 +4,6 @@ import uuid
 
 from typing import TYPE_CHECKING
 
-import openai
-
 from data_copilot.execution_apps.base import DataCopilotApp, StaticProperty
 from data_copilot.execution_apps.helpers import harmonize_column_names
 
@@ -16,6 +14,8 @@ if TYPE_CHECKING:
 
 
 def generate_sql_query(prompt, columns):
+    import openai
+
     columns = harmonize_column_names(columns)
     cols_text = ", ".join(["'" + col + "'" for col in columns])
 
@@ -177,6 +177,7 @@ class SQLInterpreter(DataCopilotApp):
         message_id: uuid.UUID,
         artifact_version_id: uuid.UUID,
         artifact_version_uri: str,
+        previous_messages: List[dict],
     ) -> "helpers.Message":
         import json
         import os

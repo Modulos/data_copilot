@@ -45,7 +45,7 @@ def main():
             default=1,
         )
 
-        compute_backend = [b for i, b in enumerate(BACKENDS)][backend - 1]
+        compute_backend = [b.value for i, b in enumerate(BACKENDS)][backend - 1]
 
         env_file = {
             "APP_NAME": name,

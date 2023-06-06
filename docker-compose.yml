@@ -6,6 +6,7 @@ services:
       - "80:80"
     depends_on:
       - backend
+      - frontend
       - adminer
 
     environment:
@@ -44,9 +45,6 @@ services:
       STORAGE_BACKEND: ${STORAGE_BACKEND}
       ENVIRONMENT: PRODUCTION
       COMPUTE_BACKEND: ${COMPUTE_BACKEND}
-      AZURE_STORAGE_ACCOUNT_KEY: ${AZURE_STORAGE_ACCOUNT_KEY}
-      AZURE_STORAGE_ACCOUNT_NAME: ${AZURE_STORAGE_ACCOUNT_NAME}
-      CONTAINER_NAME: ${CONTAINER_NAME}
 
     healthcheck:
       test:
@@ -96,12 +94,12 @@ services:
     &worker
     image: data-copilot-celery-worker
     environment:
-      - CELERY_BROKER_URL=${CELERY_BROKER_URL}
-      - OPENAI_API_KEY=${OPENAI_API_KEY}
-      - DB_CONNECTION_STRING=${DB_CONNECTION_STRING}
-      - TOKENIZERS_PARALLELISM=false
-      - ENVIRONMENT=DEVELOPMENT
-      - COMPUTE_BACKEND=${COMPUTE_BACKEND}
+      CELERY_BROKER_URL: ${CELERY_BROKER_URL}
+      OPENAI_API_KEY: ${OPENAI_API_KEY}
+      DB_CONNECTION_STRING: ${DB_CONNECTION_STRING}
+      ENVIRONMENT: DEVELOPMENT
+      COMPUTE_BACKEND: ${COMPUTE_BACKEND}
+      STORAGE_BACKEND: ${STORAGE_BACKEND}
 
     depends_on:
       backend:

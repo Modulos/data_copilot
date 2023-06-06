@@ -2,7 +2,6 @@ from enum import Enum
 from typing import Any, Dict
 
 import pandas as pd
-import simplejson
 
 from data_copilot import storage_handler
 
@@ -154,6 +153,8 @@ class Message:
         self.text_content += text
 
     def to_dict(self) -> Dict[str, str]:
+        import simplejson
+
         """Return the message as a dictionary with the message type and stringified
         message content.
 

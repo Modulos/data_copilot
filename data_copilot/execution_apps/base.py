@@ -40,5 +40,6 @@ class DataCopilotApp(abc.ABC):
         message_id: uuid.UUID,
         artifact_version_id: uuid.UUID,
         artifact_version_uri: str,
+        previous_messages: List[dict],
     ) -> "helpers.Message":
         pass

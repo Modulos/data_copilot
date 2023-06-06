@@ -71,6 +71,7 @@ class LangchainInterpreter(DataCopilotApp):
         message_id: uuid.UUID,
         artifact_version_id: uuid.UUID,
         artifact_version_uri: str,
+        previous_messages: List[dict],
     ) -> "helpers.Message":
         import json
         import logging

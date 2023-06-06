@@ -27,9 +27,6 @@ def get_envs():
         "COMPUTE_BACKEND": os.environ.get("COMPUTE_BACKEND", STANDARD_BACKEND),
         "PATH": os.environ.get("PATH", ""),
         "PYTHONPATH": os.environ.get("PYTHONPATH", ""),
-        "AZURE_STORAGE_ACCOUNT_KEY": "",
-        "AZURE_STORAGE_ACCOUNT_NAME": "",
-        "CONTAINER_NAME": "",
     }
     return env
 
