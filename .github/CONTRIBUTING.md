@@ -20,14 +20,14 @@ Changes that are cosmetic in nature and do not add anything substantial to the s
 
 #### **Do you intend to add a new feature or change an existing one?**
 
-* Suggest your change in the [Data Copilot discord channel](https://discord.gg/864J9K5d) and start writing code.
+* Suggest your change in the [Data Copilot discord channel](https://discord.gg/muerW29z) and start writing code.
 
 * Do not open an issue on GitHub until you have collected positive feedback about the change. GitHub issues are primarily intended for bug reports and fixes.
 
 
 #### **Do you have questions about the source code?**
 
-* Ask any question about how to use Data Copilot in the [discord](https://discord.gg/864J9K5d).
+* Ask any question about how to use Data Copilot in the [discord](https://discord.gg/muerW29z).
 
 
 Thanks! :heart: :heart: :heart:

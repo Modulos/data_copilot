@@ -1,4 +1,4 @@
-.. image:: data_copilot/frontend/src/assets/icons/svg/logo-landing.svg
+.. image:: https://raw.githubusercontent.com/Modulos/data_copilot/main/data_copilot/frontend/src/assets/icons/svg/logo-landing.svg
    :target: #
    :align: center
    :width: 100%
@@ -20,19 +20,33 @@
 .. image:: https://github.com/Modulos/data_copilot/actions/workflows/pr-test.yml/badge.svg?event=push
      :target: https://github.com/Modulos/data_copilot/actions/workflows/pr-test.yml
 
+.. image:: https://img.shields.io/discord/1110586557963972618?color=%237289DA&label=DataCopilot&logo=discord&logoColor=white
+   :target: https://discord.gg/muerW29z
+
 --------
 
-Data Copilot is a scalable, docker-based software solution designed to streamline data analysis. It offers a comprehensive platform that integrates frontend, backend and execution functionalities. Users can conveniently upload files in various formats such as CSV and XLSX, and interactively ask questions about these files, effectively turning complex data into understandable insights. Notably, Data Copilot also serves as a robust framework for building your own prompt-based applications, enhancing user experience and interaction. Future updates are anticipated to expand its file support, further increasing its versatility and utility in data management.
+🚀 Welcome to Data Copilot!
+===========================
 
+Data Copilot is not just another data analysis software. It is an end-to-end, scalable, and docker-based solution engineered to revolutionize the way you engage with data. As a comprehensive platform, it marries frontend, backend, and execution functionalities into a seamless user experience. Whether you're dealing with CSV or XLSX files, simply upload your data and start asking questions. With Data Copilot, you are not just analyzing data, you're conversing with it. It goes beyond being a mere tool - it's your co-pilot on the journey to unlock meaningful insights from complex data. What's more? It's a framework that allows you to build your own prompt-based applications, adding an extra dimension to user interaction. And with exciting updates on the horizon, the possibilities are limitless.
 
-Prerequisites
-=============
+Here's what makes Data Copilot your go-to data analysis companion:
+
+- 📊 Streamlined Data Analysis: Designed to streamline data analysis, making it more efficient and accessible.
+- 🚢 Docker-Based: Leverage the power of containerization to ensure scalability and easy deployment.
+- 📑 Multi-Format Support: From CSV to XLSX, upload files in various formats and interactively analyze them, easily extending to other formats.
+- 💬 Interactive Querying: Transform complex data into understandable insights through interactive queries.
+- 🛠️ Customizable Framework: A robust platform that lets you build your own prompt-based applications for enhanced user experience.
+- 📈 Future-Proof: Stay tuned for future updates that promise to further enhance its versatility and utility in data management.
+
+🔑 Prerequisites
+================
 
 Before you can install Data Copilot, you must have an OpenAI API key. You can get one by signing up for an account at `openai.com <https://beta.openai.com/signup>`_. Once you have an API key, you can proceed with the installation.
 
 
-Installation (with Docker)
-==========================
+🐳 Installation (with Docker)
+=============================
 
 Before you can install Data Copilot, you need to make sure you have the following tools installed:
 
@@ -65,13 +79,13 @@ Checkout the `Build your own Copilot` section for more information.
 
 
 
-.. image:: assets/login_page.png
+.. image:: https://raw.githubusercontent.com/Modulos/data_copilot/main/assets/login_page.png
    :align: center
    :width: 100%
 
 
-Install from PyPI
-=================
+🐍 Install from PyPI
+====================
 
 In the current implementation you also need to install redis first. 
 
@@ -115,10 +129,10 @@ Running Data Copilot in the Docker setup can be done by either running `make run
 To reset the databse you can run `make reset-db` in the root directory of the repository. This will drop all tables and create them again.
 
 
-Architecture
-============
+🏛️ Architecture
+===============
 
-.. image:: assets/architecture.svg
+.. image:: https://raw.githubusercontent.com/Modulos/data_copilot/main/assets/architecture.svg
    :align: center
    :width: 100%
 
@@ -143,8 +157,8 @@ The Data Copilot system is composed of several services, each running in its own
 The services are interconnected, with data flowing between them as necessary. This architecture allows for scalability, as each component can be scaled independently as per the workload.
 
 
-Development
-===========
+🔧 Development
+==============
 
 Storage
 -------
@@ -190,8 +204,8 @@ To start the service with hot reloading enabled, run the following command:
 This command will start the Data Copilot service in development mode. Now, whenever you make changes to your code, those changes will be immediately reflected in the running application.
 
 
-Build your own Copilot
-----------------------
+🚀 Build your own Copilot
+=========================
 
 
 Data Copilot is not just a standalone application, but also a framework that you can use to build your own data processing and analysis tools. Here are the steps to get started:
