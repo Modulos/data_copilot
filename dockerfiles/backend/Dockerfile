@@ -22,6 +22,8 @@ COPY --chown=fastapi_user:fastapi_user alembic.ini /home/fastapi_user/app/alembi
 COPY --chown=fastapi_user:fastapi_user data_copilot/db_migrations /home/fastapi_user/app/data_copilot/db_migrations
 COPY --chown=fastapi_user:fastapi_user data_copilot/db_models /home/fastapi_user/app/data_copilot/db_models
 COPY --chown=fastapi_user:fastapi_user data_copilot/storage_handler /home/fastapi_user/app/data_copilot/storage_handler
+COPY --chown=fastapi_user:fastapi_user data_copilot/execution_apps /home/fastapi_user/app/data_copilot/execution_apps
+
 ARG ENV
 ENV ENV=${ENV} \
     PYTHONPATH=/home/fastapi_user/app/ \

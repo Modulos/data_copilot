@@ -64,7 +64,7 @@ Once you have Docker, Docker Compose, and Python3 installed, you can download an
 
     git clone https://github.com/modulos/data_copilot.git
     cd data_copilot
-    pip install -r requirements_dev.txt
+    pip install ".[dev]"
     make setup
 
 **Open Data Copilot in your browser: http://localhost:80**
@@ -210,18 +210,14 @@ This command will start the Data Copilot service in development mode. Now, whene
 
 Data Copilot is not just a standalone application, but also a framework that you can use to build your own data processing and analysis tools. Here are the steps to get started:
 
-1. **Worker Logic:** The worker logic can be found in the `celery_app/apps` directory. You can modify the logic here to suit your specific needs.
+1. **Logic:** All the logic of your app should be in the `data_copilot/execution_apps/apps` directory. You can modify the logic here to suit your specific needs. You can inherit from the `data_copilot.exection_apps.base.DataCopilotApp` class. You need to implement at least the three static methods:
+   - `supported_file_types`: This method should return a dict of the supported file types. The keys should be the identifier and the value the content-type of the file type.
+   - `process_data_upload`: This method gets a list of the FastAPI `UploadFile` objects and should return a list of dict where the key is the file name and the value the content of the file as BufferedIOBase
+   - `execute_message`: This method contnains the execution logic of your app, which gets executed on the worker.
 
-2. **Getting Started Example:** For a basic understanding of the worker logic, you can refer to the `celery_app/apps/getting_started_example.py` file. This file provides a simple example that can serve as a starting point for your custom logic.
-
-3. **Executor Logic:** The executor logic is contained in the `celery_app/executors/getting_started_executor.py` file. You can modify this file to customize how tasks are executed.
-
-4. **Supported File Types:** If you want to change the supported file types (e.g., extend support to PDF), you will need to configure this on the backend side in the `backend/config/config.py` file. Additionally, you need to implement the logic for handling the new file type in the `backend/routers/artifacts.py` file.
-
-5. **File Type Interaction:** Once you've configured the backend to support the new file type, you'll need to implement the specific logic for interacting with that file type on the worker side.
-
-6. **Return Types:** Currently, Data Copilot is configured to only return tables to the user. However, the framework supports other return types such as heatmaps, histograms, and barplots. You can see the implementation details for these types in the `getting_started_executor.py` file.
-
+2. **Message** The execution_message should return a `data_copilot.execution_apps.helpers.Message` object. 
+   
+  
 With these steps, you can customize Data Copilot to handle your specific data processing and analysis tasks. Remember to thoroughly test your changes to ensure they work as expected.
 
 

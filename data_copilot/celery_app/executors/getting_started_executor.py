@@ -5,7 +5,7 @@ import pandas as pd
 from pandas import read_excel
 import numpy as np
 
-from data_copilot.celery_app.executors import helpers
+from data_copilot.execution_apps import helpers
 
 
 @helpers.path_processor

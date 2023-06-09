@@ -16,6 +16,8 @@ COPY dockerfiles/celery-worker/requirements.txt /tmp/requirements.txt
 RUN pip install --user -r /tmp/requirements.txt
 COPY --chown=celery_user:celery_user data_copilot/celery_app /home/celery_user/app/data_copilot/celery_app
 COPY --chown=celery_user:celery_user data_copilot/db_models /home/celery_user/app/data_copilot/db_models
+COPY --chown=celery_user:celery_user data_copilot/execution_apps /home/celery_user/app/data_copilot/execution_apps
+COPY --chown=celery_user:celery_user data_copilot/storage_handler /home/celery_user/app/data_copilot/storage_handler
 ARG ENV
 ENV ENV=${ENV} \
     PYTHONPATH=/home/celery_user/app/ \

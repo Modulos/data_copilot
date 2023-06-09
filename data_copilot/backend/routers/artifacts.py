@@ -1,9 +1,6 @@
-import json
-import logging
 import os
 from typing import Optional
 
-import pandas as pd
 from fastapi import Depends, HTTPException, UploadFile, routing
 
 from data_copilot.backend.artifacts.artifact import CreateArtifactVersionCM
@@ -37,6 +34,8 @@ from data_copilot.backend.schemas.artifacts import (
 )
 from data_copilot.backend.schemas.authentication import User
 from data_copilot.storage_handler import get_signed_download_url, list_files
+from data_copilot.execution_apps import get_app
+
 
 artifacts_router = routing.APIRouter(prefix="/artifacts")
 
@@ -321,45 +320,15 @@ async def post_artifacts_id_artifactid_versions(
             status_code=400, detail="Only dataset artifact versions can be uploaded"
         )
 
-    if file.content_type not in CONFIG.ALLOWED_ARTIFACTS_CONTENT_TYPES.keys():
+    if file.content_type not in get_app().supported_file_types.keys():
         raise routing.HTTPException(
             status_code=415, detail=f"File format '{file.content_type}' not allowed"
         )
 
-    try:
-        file_type = CONFIG.ALLOWED_ARTIFACTS_CONTENT_TYPES[file.content_type]
-        match file_type:
-            case "csv":
-                data_frame = pd.read_csv(file.file, sep=None, encoding="utf-8-sig")
-            case "xls" | "xlsx":
-                data_frame = pd.read_excel(await file.read(), dtype={"dteday": str})
-
-        if data_frame.empty:
-            raise routing.HTTPException(
-                status_code=400, detail=f"Wrong '{file.file}'content"
-            )
-
-    except Exception as e:
-        logging.error(e)
-        raise routing.HTTPException(
-            status_code=500, detail=f"Loading '{file.content_type}' failed"
-        )
-    schema = {col: str(data_frame[col].dtype) for col in data_frame.columns}
-    file_config = {
-        "file_name": file.filename,
-        "file_type": file_type,
-        "file_schema": schema,
-        "rows": data_frame.shape[0],
-    }
-    file.file.seek(0)
     with CreateArtifactVersionCM(artifact.id, db) as cm:
-        cm.write(file.filename, file.file)
-        artifact_version_config = {
-            "artifact_id": str(artifact.id),
-            "artifact_version_id": str(cm.uuid),
-            "files": [file_config],
-        }
-        cm.write("config.json", json.dumps(artifact_version_config, indent=4))
+        files = get_app().process_data_upload([file], artifact, cm)
+        for file in files:
+            cm.write(*file)
         uuid = cm.uuid
 
     return crud_get_artifact_version(db, uuid)

@@ -2,6 +2,8 @@ import click
 import os
 from subprocess import call, check_output
 
+from data_copilot.execution_apps import BACKENDS
+
 
 @click.command
 def main():
@@ -34,25 +36,16 @@ def main():
             check_output("openssl rand -hex 32", shell=True).decode("utf-8").strip()
         )
 
+        backend_selection = "\n".join(
+            [f"[{i}] {b.value} " for i, b in enumerate(BACKENDS, start=1)]
+        )
         backend = click.prompt(
-            (
-                "Which backend do you want to use? \n "
-                "[1] SQL \n "
-                "[2] Getting Started \n "
-                "[3] Langchain \n "
-            ),
+            (f"Which backend do you want to use? \n{backend_selection}\n"),
             type=int,
             default=1,
         )
 
-        if backend == 1:
-            compute_backend = "sql"
-
-        elif backend == 2:
-            compute_backend = "getting_started"
-
-        elif backend == 3:
-            compute_backend = "langchain"
+        compute_backend = [b.value for i, b in enumerate(BACKENDS)][backend - 1]
 
         env_file = {
             "APP_NAME": name,

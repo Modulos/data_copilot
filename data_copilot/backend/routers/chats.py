@@ -1,6 +1,4 @@
 import asyncio
-import json
-import os
 import time
 
 from fastapi import Depends, HTTPException, routing
@@ -45,11 +43,6 @@ from data_copilot.backend.schemas.chats import (
     RequestOptions,
     UpdateChat,
     parse_chat_message,
-)
-from data_copilot.storage_handler.functions import (
-    exists,
-    get_signed_download_url,
-    read_file,
 )
 
 CONFIG = Config()
@@ -293,7 +286,6 @@ async def post_chats_chatid_messages_messageid(
         message (Message): The message to be executed
 
     """
-    artifact_config = {}
     if message.artifact_version_id:
         artifact_version: ArtifactVersion = await get_artifact_version_dependency(
             message.artifact_version_id, db=db
@@ -304,29 +296,20 @@ async def post_chats_chatid_messages_messageid(
         await check_if_user_has_access_to_artifact(artifact, current_user)
         await check_if_artifact_is_active(artifact)
 
-        if not exists(os.path.join(artifact_version.artifact_uri, "config.json")):
-            raise HTTPException(
-                status_code=400,
-                detail="The artifact version must contain a config.json file",
-            )
+    artifact_version_uri = artifact_version.artifact_uri if artifact_version else None
 
-        artifact_config = json.load(
-            read_file(os.path.join(artifact_version.artifact_uri, "config.json"))
-        )
-        file_name = artifact_config.get("files", [dict()])[0].get("file_name", None)
-        if not exists(os.path.join(artifact_version.artifact_uri, file_name)):
-            raise HTTPException(
-                status_code=400,
-                detail=f"The artifact version must contain a file named {file_name}",
-            )
+    previous_messages = crud_get_messages_by_chat_id_sorted_desc(
+        db,
+        chat_id=message.chat_id,
+        limit=10,
+        offset=0,
+    )
 
-        sas_url = get_signed_download_url(
-            os.path.join(artifact_version.artifact_uri, file_name)
-        )
-        artifact_version_id = artifact_version.id
-    else:
-        sas_url = None
-        artifact_version_id = None
+    # make json from previous messages
+    previous_messages = [
+        parse_chat_message(Message.from_orm(message)).dict()
+        for message in previous_messages
+    ]
 
     execution_app.send_task(
         "execute_user_message",
@@ -334,9 +317,9 @@ async def post_chats_chatid_messages_messageid(
             message.content,
             message.chat_id,
             message.id,
-            artifact_version_id,
-            sas_url,
-            artifact_config,
+            artifact_version.id,
+            artifact_version_uri,
+            previous_messages,
         ),
     )
 
