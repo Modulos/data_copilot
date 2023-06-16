@@ -44,46 +44,6 @@ Here's what makes Data Copilot your go-to data analysis companion:
 
 Before you can install Data Copilot, you must have an OpenAI API key. You can get one by signing up for an account at `openai.com <https://beta.openai.com/signup>`_. Once you have an API key, you can proceed with the installation.
 
-
-🐳 Installation (with Docker)
-=============================
-
-Before you can install Data Copilot, you need to make sure you have the following tools installed:
-
-- `Docker <https://docs.docker.com/get-docker/>`_
-- `Docker Compose <https://docs.docker.com/compose/install/>`_
-- `Python3 <https://www.python.org/downloads/>`_
-
-Each of these tools has its own installation guide. Follow the links to get instructions for your specific operating system (Windows, Mac, or Linux).
-
-**Cloning and Setting Up**
-
-Once you have Docker, Docker Compose, and Python3 installed, you can download and set up Data Copilot. Run the following commands in your terminal:
-
-.. code-block:: bash
-
-    git clone https://github.com/modulos/data_copilot.git
-    cd data_copilot
-    pip install ".[dev]"
-    make setup
-
-**Open Data Copilot in your browser: http://localhost:80**
-
-
-These commands will clone the Data Copilot repository and run the setup process.
-
-During the setup process, you will be prompted to enter your openai API key. You can also enter it manually by editing the ``.dev.env`` file in the root directory of the repository after the installation.
-
-Choose `sql` or `langchain` as the compute backend. This will allow you to use the full functionality of Data Copilot. The getting_started compute backend is a limited version which will help you to get started with implementing your own logic. 
-Checkout the `Build your own Copilot` section for more information.
-
-
-
-.. image:: https://raw.githubusercontent.com/Modulos/data_copilot/main/assets/login_page.png
-   :align: center
-   :width: 100%
-
-
 🐍 Install from PyPI
 ====================
 
@@ -119,6 +79,45 @@ First make sure to have python3.10 installed. Then run the following command in 
   data-copilot run
 
 **If you run data-copilot like this, you can open open Data Copilot in your browser under port 8080: http://localhost:8080**
+
+
+🐳 Installation (with Docker)
+=============================
+
+Before you can install Data Copilot, you need to make sure you have the following tools installed:
+
+- `Docker (v24.0+) <https://docs.docker.com/get-docker/>`_
+- `Docker Compose (v2.18+) <https://docs.docker.com/compose/install/>`_
+- `Python3 (3.10+) <https://www.python.org/downloads/>`_
+
+Each of these tools has its own installation guide. Follow the links to get instructions for your specific operating system (Windows, Mac, or Linux).
+
+**Cloning and Setting Up**
+
+Once you have Docker, Docker Compose, and Python3 installed, you can download and set up Data Copilot. Run the following commands in your terminal:
+
+.. code-block:: bash
+
+    git clone https://github.com/modulos/data_copilot.git
+    cd data_copilot
+    pip install ".[dev]"
+    make setup
+
+**Open Data Copilot in your browser: http://localhost:80**
+
+
+These commands will clone the Data Copilot repository and run the setup process.
+
+During the setup process, you will be prompted to enter your openai API key. You can also enter it manually by editing the ``.dev.env`` file in the root directory of the repository after the installation.
+
+Choose `sql` or `langchain` as the compute backend. This will allow you to use the full functionality of Data Copilot. The getting_started compute backend is a limited version which will help you to get started with implementing your own logic. 
+Checkout the `Build your own Copilot` section for more information.
+
+
+
+.. image:: https://raw.githubusercontent.com/Modulos/data_copilot/main/assets/login_page.png
+   :align: center
+   :width: 100%
 
 
 Maintaining and Updating
@@ -291,7 +290,7 @@ Contributors
      - 
      - 
    * - 
-     - `Dominic Stark <https://github.com/dominicstark>`_
+     - `Dominic Stark <https://github.com/dominic-stark>`_
      - 
      - 
      - 
