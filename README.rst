@@ -21,7 +21,7 @@
      :target: https://github.com/Modulos/data_copilot/actions/workflows/pr-test.yml
 
 .. image:: https://img.shields.io/discord/1110586557963972618?color=%237289DA&label=DataCopilot&logo=discord&logoColor=white
-   :target: https://discord.gg/muerW29z
+   :target: https://discord.gg/ABBEyXH3
 
 --------
 
