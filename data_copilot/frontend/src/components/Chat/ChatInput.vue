@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import {
-  ref, watch, onMounted,
+  ref, watch, onMounted, toRef,
 } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import useMessagesStore from '@/stores/messages';
@@ -28,7 +28,7 @@ const chats = useChatsStore();
 const auth = useAuthStore();
 const { isMobile } = useBreakpoints();
 
-const inputText = ref(props.text);
+const inputText = toRef(props, 'text');
 const showInput = route.name === 'home' && auth.activateAnimation ? ref(false) : ref(true);
 
 const sendMessage = async () => {
