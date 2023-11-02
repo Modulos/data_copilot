@@ -3,7 +3,7 @@ from datetime import datetime
 from enum import Enum
 from typing import List, Optional
 
-from pydantic import BaseModel, validator
+from pydantic import field_validator, ConfigDict, BaseModel
 
 
 class ArtifactVersionStatus(str, Enum):
@@ -34,16 +34,12 @@ class ArtifactVersion(BaseModel):
     description: str = ""
     created_at: datetime
     status: ArtifactVersionStatus = ArtifactVersionStatus.active
-
-    class Config:
-        orm_mode = True
+    model_config = ConfigDict(from_attributes=True)
 
 
 class ArtifactVersionFiles(ArtifactVersion):
     files: list[str]
-
-    class Config:
-        orm_mode = True
+    model_config = ConfigDict(from_attributes=True)
 
 
 class Artifact(BaseModel):
@@ -54,24 +50,23 @@ class Artifact(BaseModel):
     description: str = ""
     created_at: datetime
     status: ArtifactStatus = ArtifactStatus.active
-    # versions: List[ArtifactVersion] = []
-
-    class Config:
-        orm_mode = True
+    model_config = ConfigDict(from_attributes=True)
 
 
 class UpdateArtifact(BaseModel):
     name: Optional[str] = None
     description: Optional[str] = None
 
-    @validator("name")
+    @field_validator("name")
+    @classmethod
     def name_must_be_not_none(cls, v):
         if v is None:
             raise ValueError("must be not None")
 
         return v
 
-    @validator("description")
+    @field_validator("description")
+    @classmethod
     def description_must_be_not_none(cls, v):
         if v is None:
             raise ValueError("must be not None")

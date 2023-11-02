@@ -1,6 +1,6 @@
 import uuid
 
-from pydantic import BaseModel, EmailStr
+from pydantic import ConfigDict, BaseModel, EmailStr
 
 
 class Token(BaseModel):
@@ -13,8 +13,7 @@ class TokenData(BaseModel):
 
 
 class ORMBase(BaseModel):
-    class Config:
-        orm_mode = True
+    model_config = ConfigDict(from_attributes=True)
 
 
 class Group(ORMBase):

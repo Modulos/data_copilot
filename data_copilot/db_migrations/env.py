@@ -11,7 +11,7 @@ from data_copilot.db_models import base
 
 
 class Config(BaseSettings):
-    DB_CONNECTION_STRING: str = Field(..., env="DB_CONNECTION_STRING")
+    DB_CONNECTION_STRING: str = Field(..., validation_alias="DB_CONNECTION_STRING")
 
     @property
     def POSTGRES_CONNECTION(self):

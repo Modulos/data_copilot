@@ -7,9 +7,9 @@ from pydantic_settings import BaseSettings
 
 class Config(BaseSettings):
     # Server
-    BACKEND_HOST: str = Field(..., env="BACKEND_HOST")
+    BACKEND_HOST: str = Field(..., validation_alias="BACKEND_HOST")
     # ENVIRONMENT from env variable default to "PROD"
-    ENVIRONMENT: str = Field(default="PROD", env="ENVIRONMENT")
+    ENVIRONMENT: str = Field(default="PROD", validation_alias="ENVIRONMENT")
 
     ALGORITHM: str = "HS256"
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
@@ -20,15 +20,15 @@ class Config(BaseSettings):
         "application/vnd.ms-excel": "xls",
         "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": "xlsx",
     }
-    COMPUTE_BACKEND: str = Field(..., env="COMPUTE_BACKEND")
+    COMPUTE_BACKEND: str = Field(..., validation_alias="COMPUTE_BACKEND")
 
     if os.getenv("ENVIRONMENT") != "TEST":
-        DB_CONNECTION_STRING: str = Field(..., env="DB_CONNECTION_STRING")
-        SECRET_KEY: str = Field(..., env="JWT_SECRET_KEY")
-        STORAGE_BACKEND: str = Field(..., env="STORAGE_BACKEND")
-        BACKEND_HOST: str = Field(..., env="BACKEND_HOST")
+        DB_CONNECTION_STRING: str = Field(..., validation_alias="DB_CONNECTION_STRING")
+        SECRET_KEY: str = Field(..., validation_alias="JWT_SECRET_KEY")
+        STORAGE_BACKEND: str = Field(..., validation_alias="STORAGE_BACKEND")
+        BACKEND_HOST: str = Field(..., validation_alias="BACKEND_HOST")
 
-        CELERY_BROKER_URL: str = Field(..., env="CELERY_BROKER_URL")
+        CELERY_BROKER_URL: str = Field(..., validation_alias="CELERY_BROKER_URL")
 
     elif os.getenv("ENVIRONMENT") == "TEST":
         secret_key = "c86d3444a380bb36cca7abe1b6dcc8caaee0ecf5bbe254c5473783d147ebc12e"
@@ -38,9 +38,13 @@ class Config(BaseSettings):
         CELERY_BROKER_URL: str = ""
 
     if "dfs.core.windows.net" in os.getenv("STORAGE_BACKEND"):
-        AZURE_STORAGE_ACCOUNT_NAME: str = Field(..., env="AZURE_STORAGE_ACCOUNT_NAME")
-        AZURE_STORAGE_ACCOUNT_KEY: str = Field(..., env="AZURE_STORAGE_ACCOUNT_KEY")
-        CONTAINER_NAME: str = Field(..., env="CONTAINER_NAME")
+        AZURE_STORAGE_ACCOUNT_NAME: str = Field(
+            ..., validation_alias="AZURE_STORAGE_ACCOUNT_NAME"
+        )
+        AZURE_STORAGE_ACCOUNT_KEY: str = Field(
+            ..., validation_alias="AZURE_STORAGE_ACCOUNT_KEY"
+        )
+        CONTAINER_NAME: str = Field(..., validation_alias="CONTAINER_NAME")
 
     @property
     def POSTGRES_CONNECTION(self):
