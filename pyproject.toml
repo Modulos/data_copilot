@@ -40,7 +40,7 @@ dependencies = [
   "pandas>=1.5.3, <= 2.1.2",
   "passlib>=1.7.4, <= 1.7.4",
   "psycopg2-binary>=2.9.5, <= 2.9.9",
-  "pydantic>=2.4.4, <= 2.4.2",
+  "pydantic>=2.4.2, <= 2.4.2",
   "pydantic-settings >= 2.0.2, <= 2.0.3",
   "python-dotenv>=0.21.1, <= 1.0.0",
   "python-jose>=3.3.0, <= 3.3.0",
