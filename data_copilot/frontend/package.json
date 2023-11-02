@@ -16,7 +16,7 @@
   },
   "dependencies": {
     "@vue/eslint-config-airbnb-with-typescript": "^7.0.0",
-    "@vueuse/core": "^9.13.0",
+    "@vueuse/core": "^10.5.0",
     "axios": "^1.6.0",
     "d3": "^7.8.5",
     "eslint-config-airbnb-typescript": "^17.1.0",
