@@ -22,7 +22,7 @@
     "eslint-config-airbnb-typescript": "^17.1.0",
     "pinia": "^2.0.28",
     "qs": "^6.11.2",
-    "vee-validate": "^4.7.3",
+    "vee-validate": "^4.11.8",
     "vite-svg-loader": "^4.0.0",
     "vue": "^3.2.45",
     "vue-router": "^4.1.6"
