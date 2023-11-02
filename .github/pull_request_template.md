@@ -5,7 +5,7 @@
 
 
 ## Issue link
-fix / close / resolve #XX  (Use one of the verbs to automatically link the PR to the issue)
+close #XX
 
 ## How to test the PR
 
