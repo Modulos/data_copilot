@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, watch } from 'vue';
+import { ref, watch, toRef } from 'vue';
 import useChatsStore from '@/stores/chats';
 import useModalStore from '@/stores/modal';
 
@@ -26,7 +26,7 @@ const chatStore = useChatsStore();
 const modalStore = useModalStore();
 const editActive = ref(false);
 const showTooltip = ref(false);
-const editInput = props.description ? ref(props.description) : ref('');
+const editInput = props.description ? toRef(props, 'description') : ref('');
 
 async function deleteChat() {
   modalStore.fillModal('Delete chat', 'Would you like to permanently delete this chat?');
