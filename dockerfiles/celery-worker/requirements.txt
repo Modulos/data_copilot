@@ -6,6 +6,7 @@ openpyxl>=3.1.1
 pandas>=1.5.3
 psycopg2-binary>=2.9.5
 pydantic>=1.10.4
+pydantic-settings >= 2.0.2
 redis>=4.4.2
 simplejson>=3.18.3
 sqlalchemy>=2.0.4
