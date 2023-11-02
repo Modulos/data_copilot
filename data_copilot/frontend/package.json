@@ -19,7 +19,7 @@
     "@vueuse/core": "^9.13.0",
     "axios": "^1.6.0",
     "d3": "^7.8.5",
-    "eslint-config-airbnb-typescript": "^17.0.0",
+    "eslint-config-airbnb-typescript": "^17.1.0",
     "pinia": "^2.0.28",
     "qs": "^6.11.2",
     "vee-validate": "^4.7.3",
