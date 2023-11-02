@@ -24,7 +24,7 @@
     "qs": "^6.11.2",
     "vee-validate": "^4.7.3",
     "vite-svg-loader": "^4.0.0",
-    "vue": "^3.2.45",
+    "vue": "^3.3.7",
     "vue-router": "^4.2.5"
   },
   "devDependencies": {
