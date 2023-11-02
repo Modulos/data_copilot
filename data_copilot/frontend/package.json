@@ -33,7 +33,7 @@
     "@rushstack/eslint-patch": "^1.2.0",
     "@types/d3": "^7.4.0",
     "@types/jsdom": "^20.0.1",
-    "@types/node": "^18.11.12",
+    "@types/node": "^20.8.10",
     "@types/qs": "^6.9.7",
     "@typescript-eslint/eslint-plugin": "^5.50.0",
     "@vitejs/plugin-vue": "^4.4.0",
