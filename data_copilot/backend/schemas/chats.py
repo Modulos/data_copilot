@@ -5,7 +5,7 @@ from datetime import datetime
 from enum import Enum
 from typing import Optional
 
-from pydantic import BaseModel, Field, parse_obj_as, validator
+from pydantic import field_validator, ConfigDict, BaseModel, Field, parse_obj_as
 
 
 class CreateChat(BaseModel):
@@ -21,23 +21,23 @@ class CreateChatCRUD(CreateChat):
 class Chat(CreateChatCRUD):
     id: uuid.UUID
     created_at: datetime
-
-    class Config:
-        orm_mode = True
+    model_config = ConfigDict(from_attributes=True)
 
 
 class UpdateChat(BaseModel):
     name: Optional[str] = None
     description: Optional[str] = None
 
-    @validator("name")
+    @field_validator("name")
+    @classmethod
     def name_must_be_not_none(cls, v):
         if v is None:
             raise ValueError("must be not None")
 
         return v
 
-    @validator("description")
+    @field_validator("description")
+    @classmethod
     def description_must_be_not_none(cls, v):
         if v is None:
             raise ValueError("must be not None")
@@ -71,9 +71,7 @@ class CreateChatMembershipCRUD(BaseModel):
 class ChatMembership(CreateChatMembershipCRUD):
     id: uuid.UUID
     is_active: bool = True
-
-    class Config:
-        orm_mode = True
+    model_config = ConfigDict(from_attributes=True)
 
 
 class RequestOptions(BaseModel):
@@ -118,9 +116,7 @@ class Message(CreateMessageCRUD):
     id: uuid.UUID
     created_at: datetime
     content: MessageJsonContent | str | None = None
-
-    class Config:
-        orm_mode = True
+    model_config = ConfigDict(from_attributes=True)
 
 
 class MessagesResponseMetadata(BaseModel):

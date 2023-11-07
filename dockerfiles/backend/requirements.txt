@@ -12,6 +12,7 @@ openpyxl>=3.1.1
 pandas>=1.5.3
 passlib>=1.7.4
 psycopg2-binary>=2.9.5
+pydantic-settings >= 2.0.2
 python-dotenv>=0.21.1
 python-jose>=3.3.0
 python-multipart>=0.0.5
