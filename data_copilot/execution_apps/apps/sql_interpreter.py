@@ -186,7 +186,7 @@ class SQLInterpreter(DataCopilotApp):
         from data_copilot import storage_handler
         import logging
         from data_copilot.execution_apps import helpers
-        from openai import error
+        import openai
         import pandas as pd
         from sqlalchemy import create_engine, text
 
@@ -255,7 +255,7 @@ class SQLInterpreter(DataCopilotApp):
                 table_component.data = result_df.to_dict("list")
                 message.add_component(table_component)
 
-        except error.RateLimitError:
+        except openai.RateLimitError:
             logging.error(
                 "The translation of the user prompt failed due to rate limit error --"
                 f"Prompt: {user_prompt} --"
@@ -264,7 +264,7 @@ class SQLInterpreter(DataCopilotApp):
             message = helpers.Message(helpers.MessageTypes.ERROR, "Answer")
             message.add_text("Rate limit error from OpenAI API. Please try again later")
 
-        except error.AuthenticationError:
+        except openai.AuthenticationError:
             logging.error(
                 "The translation of the user prompt failed due to authentication "
                 f"error -- Prompt: {user_prompt} --"
