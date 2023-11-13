@@ -87,7 +87,7 @@ async def post_artifact(
     """
     artifact = CreateArtifact(
         status=ArtifactStatus.active,
-        **artifact.dict(),
+        **artifact.model_dump(),
     )
     return crud_create_artifact(db, artifact, user_id=current_user.id)
 

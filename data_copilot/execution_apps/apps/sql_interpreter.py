@@ -48,8 +48,7 @@ def generate_sql_query(prompt, columns):
             max_tokens=1,
         )
         .choices[0]
-        .get("message")
-        .get("content")
+        .message.content
     )
 
     if response.lower() in ("y", "yes"):
@@ -80,8 +79,7 @@ def generate_sql_query(prompt, columns):
                 model="gpt-3.5-turbo", messages=messages, temperature=0.0
             )
             .choices[0]
-            .get("message")
-            .get("content")
+            .message.content
         )
 
     elif response.lower() in ("n", "no"):
@@ -110,14 +108,12 @@ def generate_sql_query(prompt, columns):
         response = (
             client.chat.completions.create(model="gpt-3.5-turbo", messages=messages)
             .choices[0]
-            .get("message")
-            .get("content")
+            .message.content
         )
 
     else:
         response_type = "TEXT"
 
-    print(response)
     return (response_type, response)
 
 

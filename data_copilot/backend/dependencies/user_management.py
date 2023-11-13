@@ -31,7 +31,7 @@ async def get_user_by_email(email: str, db=Depends(get_db)) -> User:
     user = crud_get_user_by_email(db, email)
     if user is None:
         raise HTTPException(status_code=404, detail="User not found")
-    return User.from_orm(user)
+    return User.model_validate(user, from_attributes=True)
 
 
 async def get_user_by_user_id(user_id: uuid.UUID, db=Depends(get_db)) -> User:
@@ -49,7 +49,7 @@ async def get_user_by_user_id(user_id: uuid.UUID, db=Depends(get_db)) -> User:
     user = crud_get_user(db, user_id)
     if user is None:
         raise HTTPException(status_code=404, detail="User not found")
-    return User.from_orm(user)
+    return User.model_validate(user, from_attributes=True)
 
 
 async def get_group_by_name(group_name: str, db=Depends(get_db)) -> Group:
@@ -67,7 +67,7 @@ async def get_group_by_name(group_name: str, db=Depends(get_db)) -> Group:
     group = crud_get_group_by_name(db, group_name)
     if group is None:
         raise HTTPException(status_code=404, detail="Group not found")
-    return Group.from_orm(group)
+    return Group.model_validate(group, from_attributes=True)
 
 
 async def user_does_not_exist(user: CreateUser, db=Depends(get_db)) -> None:

@@ -307,7 +307,9 @@ async def post_chats_chatid_messages_messageid(
 
     # make json from previous messages
     previous_messages = [
-        parse_chat_message(Message.from_orm(message)).dict()
+        parse_chat_message(
+            Message.model_validate(message, from_attributes=True)
+        ).model_dump()
         for message in previous_messages
     ]
 
