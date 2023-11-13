@@ -40,7 +40,7 @@ async def get_current_user(
     user = crud_get_user_by_email(db, token_data.username)
     if user is None:
         raise credentials_exception
-    return User.from_orm(user)
+    return User.model_validate(user, from_attributes=True)
 
 
 async def get_current_active_user(
@@ -58,7 +58,7 @@ async def get_current_active_user(
     """
     if not current_user.is_active:
         raise HTTPException(status_code=400, detail="Inactive user")
-    return User.from_orm(current_user)
+    return User.model_validate(current_user, from_attributes=True)
 
 
 async def check_if_admin(current_user: User = Depends(get_current_active_user)) -> bool:

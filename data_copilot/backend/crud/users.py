@@ -46,7 +46,7 @@ def crud_get_groups(db: Session, skip: int = 0, limit: int = 100):
 
 def crud_create_user(db: Session, user: user_schema.CreateUser):
     hashed_password = pwd_context.hash(user.password)
-    user_dict = user.dict()
+    user_dict = user.model_dump()
     user_dict.pop("password")
     db_user = user_model.User(**user_dict, hashed_password=hashed_password)
     db.add(db_user)
@@ -56,7 +56,7 @@ def crud_create_user(db: Session, user: user_schema.CreateUser):
 
 
 def crud_create_sso_user(db: Session, user: user_schema.CreateUser, provider: str):
-    user_dict = user.dict()
+    user_dict = user.model_dump()
     user_dict.pop("password")
     db_user = user_model.User(**user_dict, sso=True, sso_provider=provider)
     db.add(db_user)
@@ -71,7 +71,7 @@ def crud_add_user_to_group(
     group_membership = user_schema.CreateGroupMembership(
         group_id=group.id, member_id=user.id
     )
-    db_group_membership = user_model.GroupMemberships(**group_membership.dict())
+    db_group_membership = user_model.GroupMemberships(**group_membership.model_dump())
     db.add(db_group_membership)
     db.commit()
     return crud_get_user(db, user.id)
@@ -87,7 +87,7 @@ def crud_remove_user_from_group(db: Session, user_id: uuid.UUID, group_id: uuid.
 
 
 def crud_create_group(db: Session, group: user_schema.CreateGroup):
-    db_group = user_model.Group(**group.dict())
+    db_group = user_model.Group(**group.model_dump())
     db.add(db_group)
     db.commit()
     db.refresh(db_group)

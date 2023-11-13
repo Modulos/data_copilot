@@ -32,7 +32,7 @@ async def get_chat_if_user_has_access_dependency(
     chat = crud_get_chat_with_user_id(db, chat_id, current_user.id)
     if chat is None:
         raise HTTPException(status_code=404, detail="Chat not found")
-    return Chat.from_orm(chat)
+    return Chat.model_validate(chat, from_attributes=True)
 
 
 async def get_message_if_user_has_access_dependency(
@@ -57,4 +57,4 @@ async def get_message_if_user_has_access_dependency(
     )
     if message is None:
         raise HTTPException(status_code=404, detail="Message not found")
-    return Message.from_orm(message)
+    return Message.model_validate(message, from_attributes=True)

@@ -79,7 +79,7 @@ class LangchainInterpreter(DataCopilotApp):
 
         from langchain.agents import create_pandas_dataframe_agent
         from langchain.llms import OpenAI
-        from openai import error
+        import openai
 
         from data_copilot import storage_handler
         from data_copilot.execution_apps import helpers
@@ -117,7 +117,7 @@ class LangchainInterpreter(DataCopilotApp):
 
             answer = agent.run(user_prompt)
             message.add_text(f"{answer}")
-        except error.RateLimitError:
+        except openai.RateLimitError:
             logging.error(
                 "The translation of the user prompt failed due to rate limit error --"
                 f"Prompt: {user_prompt} --"
@@ -126,7 +126,7 @@ class LangchainInterpreter(DataCopilotApp):
             message = helpers.Message(helpers.MessageTypes.ERROR, "Answer")
             message.add_text("Rate limit error from OpenAI API. Please try again later")
 
-        except error.AuthenticationError:
+        except openai.AuthenticationError:
             logging.error(
                 "The translation of the user prompt failed due to authentication "
                 f"error -- Prompt: {user_prompt} --"

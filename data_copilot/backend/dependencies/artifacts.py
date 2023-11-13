@@ -34,7 +34,7 @@ async def get_artifact_dependency(
     artifact = crud_get_artifact(db, artifact_id)
     if artifact is None:
         raise HTTPException(status_code=404, detail="Artifact not found")
-    return Artifact.from_orm(artifact)
+    return Artifact.model_validate(artifact, from_attributes=True)
 
 
 async def get_artifact_if_user_has_access_and_not_deleted_dependency(
@@ -61,7 +61,7 @@ async def get_artifact_if_user_has_access_and_not_deleted_dependency(
     if artifact is None:
         raise HTTPException(status_code=404, detail="Artifact not found")
 
-    return Artifact.from_orm(artifact)
+    return Artifact.model_validate(artifact, from_attributes=True)
 
 
 async def get_artifact_version_dependency(
@@ -81,7 +81,7 @@ async def get_artifact_version_dependency(
     artifact_version = crud_get_artifact_version(db, artifact_version_id)
     if artifact_version is None:
         raise HTTPException(status_code=404, detail="Artifact Version not found")
-    return ArtifactVersion.from_orm(artifact_version)
+    return ArtifactVersion.model_validate(artifact_version, from_attributes=True)
 
 
 async def get_artifact_from_artifact_version_dependency(
@@ -102,7 +102,7 @@ async def get_artifact_from_artifact_version_dependency(
     artifact = crud_get_artifact(db, artifact_version.artifact_id)
     if artifact is None:
         raise HTTPException(status_code=404, detail="Artifact not found")
-    return Artifact.from_orm(artifact)
+    return Artifact.model_validate(artifact, from_attributes=True)
 
 
 async def check_if_artifact_version_belongs_to_artifact(
