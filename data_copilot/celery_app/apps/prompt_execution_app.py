@@ -70,7 +70,7 @@ def save_result(
 @execution_app.task(
     name="executing_user_prompt",
     soft_time_limit=60,
-    autoretry_for=(TimeLimitExceeded, openai.error.RateLimitError),
+    autoretry_for=(TimeLimitExceeded, openai.RateLimitError),
     retry_kwargs={"max_retries": 3, "countdown": 30},
 )
 def execute_user_prompt(
