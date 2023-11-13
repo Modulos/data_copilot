@@ -14,7 +14,9 @@ if TYPE_CHECKING:
 
 
 def generate_sql_query(prompt, columns):
-    import openai
+    from openai import OpenAI
+
+    client = OpenAI()
 
     columns = harmonize_column_names(columns)
     cols_text = ", ".join(["'" + col + "'" for col in columns])
@@ -40,7 +42,7 @@ def generate_sql_query(prompt, columns):
     ]
 
     response = (
-        openai.ChatCompletion.create(
+        client.chat.completions.create(
             model="gpt-3.5-turbo",
             messages=messages,
             max_tokens=1,
@@ -74,7 +76,7 @@ def generate_sql_query(prompt, columns):
         ]
 
         response = (
-            openai.ChatCompletion.create(
+            client.chat.completions.create(
                 model="gpt-3.5-turbo", messages=messages, temperature=0.0
             )
             .choices[0]
@@ -106,7 +108,7 @@ def generate_sql_query(prompt, columns):
         ]
 
         response = (
-            openai.ChatCompletion.create(model="gpt-3.5-turbo", messages=messages)
+            client.chat.completions.create(model="gpt-3.5-turbo", messages=messages)
             .choices[0]
             .get("message")
             .get("content")

@@ -24,15 +24,18 @@ def bump_major_number(version_number: str) -> str:
     major, minor, patch = version_number.split(".")
     return f"{int(major) + 1}.{0}.{0}"
 
+
 def bump_minor_number(version_number: str) -> str:
     """Return a copy of `version_number` with the minor number incremented."""
     major, minor, patch = version_number.split(".")
     return f"{major}.{int(minor) + 1}.{0}"
 
+
 def bump_patch_number(version_number: str) -> str:
     """Return a copy of `version_number` with the patch number incremented."""
     major, minor, patch = version_number.split(".")
     return f"{major}.{minor}.{int(patch) + 1}"
+
 
 def create_new_release(release: str):
     """Create a new patch release on GitHub."""
@@ -57,6 +60,7 @@ def create_new_release(release: str):
         ["gh", "release", "create", "--generate-notes", new_version_number],
         check=True,
     )
+
 
 if __name__ == "__main__":
     create_new_release(sys.argv[1])
