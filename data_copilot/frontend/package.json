@@ -34,7 +34,7 @@
     "@types/d3": "^7.4.3",
     "@types/jsdom": "^21.1.6",
     "@types/node": "^20.10.7",
-    "@types/qs": "^6.9.10",
+    "@types/qs": "^6.9.11",
     "@typescript-eslint/eslint-plugin": "^5.50.0",
     "@vitejs/plugin-vue": "^4.5.1",
     "@vue/eslint-config-prettier": "^9.0.0",
