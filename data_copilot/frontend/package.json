@@ -30,7 +30,7 @@
   "devDependencies": {
     "@cypress/vite-dev-server": "^5.0.6",
     "@cypress/vue": "^6.0.0",
-    "@rushstack/eslint-patch": "^1.6.0",
+    "@rushstack/eslint-patch": "^1.6.1",
     "@types/d3": "^7.4.3",
     "@types/jsdom": "^21.1.6",
     "@types/node": "^20.10.7",
