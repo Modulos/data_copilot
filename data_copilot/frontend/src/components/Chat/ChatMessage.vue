@@ -50,7 +50,7 @@ function getText(componentData: any) {
         {{ props.message.content }}
       </div>
       <div class="response__content flex flex-col" v-else>
-        <div :class="[isMobile ? 'mx-0 my-3' : 'm-3']" v-for="component in props.message.content?.components" :key="component.name || '' + component.description">
+        <div :class="[isMobile ? 'mx-0 my-3' : 'm-3']" v-for="(component, index) in props.message.content?.components" :key="`${component.name || ''}${component.description || ''}${index}`">
           <TableDisplay v-if="component.type === 'table'" :inputData="component" />
           <HistogramPlot v-else-if="component.type === 'plot_hist'" :inputData="component" />
           <BarChartPlot v-else-if="component.type === 'plot_bar'" :inputData="component" />
