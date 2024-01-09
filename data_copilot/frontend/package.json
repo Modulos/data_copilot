@@ -28,7 +28,7 @@
     "vue-router": "^4.2.5"
   },
   "devDependencies": {
-    "@cypress/vite-dev-server": "^5.0.6",
+    "@cypress/vite-dev-server": "^5.0.7",
     "@cypress/vue": "^6.0.0",
     "@rushstack/eslint-patch": "^1.6.1",
     "@types/d3": "^7.4.3",
