@@ -26,7 +26,7 @@ onBeforeUnmount(() => {
 });
 </script>
 <template>
-  <div class="tooltip" :style="{ top: y + 'px', left: x + 'px' }">
+  <div class="tooltip" :style="{ top: `${y}px`, left: `${x}px` }">
     <span class="tooltip__text"> {{ text }}</span>
   </div>
 </template>

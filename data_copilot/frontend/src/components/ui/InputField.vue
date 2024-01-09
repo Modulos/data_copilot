@@ -19,14 +19,14 @@ defineExpose({
   <div class="relative h-14 w-full min-w-[200px]">
     <input
       ref="root"
-      :id="'inputField' + modelValue"
+      :id="`inputField${modelValue}`"
       :type="inputType"
       :value="modelValue"
       @input="$emit('update:modelValue', ($event.target as HTMLTextAreaElement).value)"
       class="peer h-full w-full rounded-[7px] border border-[#27FFC6] border-t-transparent bg-transparent px-3 py-2 outline outline-0 transition-all placeholder-shown:border placeholder-shown:border-[#27FFC6] placeholder-shown:border-t-[#27FFC6]  focus:border-2 focus:border-t-transparent text-white"
       placeholder=" " />
     <label
-      :for="'inputField' + modelValue"
+      :for="`inputField${modelValue}`"
       class="before:content[' '] after:content[' ']
             pointer-events-none absolute left-0 -top-1.5 flex h-full w-full
             select-none font-normal leading-tight text-[#27FFC6] text-[11px]
